@@ -37,12 +37,12 @@ const routes = [
         children: [
           {
             path: "list", //访问路径：/product/list
-            name: "list",
+            name: "product-list",
             component: ProductList,
           },
           {
             path: "category", //访问路径：/product/category
-            name: "category",
+            name: "product-category",
             component: Category,
           },
         ],
