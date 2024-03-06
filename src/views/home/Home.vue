@@ -180,9 +180,9 @@
 </script>
 
 <style lang="less" scoped>
-  // .home {
-  //   margin: 10px;
-  // }
+  .home {
+    margin: 10px;
+  }
 
   .header {
     display: flex;
