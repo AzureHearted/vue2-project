@@ -1,0 +1,24 @@
+/* s基础样式 */
+/* 引入阿里矢量图标 */
+@import url('https://at.alicdn.com/t/font_2448847_ogyed8on8j.css');
+
+h1,h2,h3,h4,ul,li{
+  margin: 0;
+  padding: 0;
+}
+ul{
+  /* 去除默认表单样式 */
+  list-style: none;
+}
+a{
+  /* 去除链接下划线 */
+  text-decoration: none;
+}
+img{
+  /* 图片默认垂直居中 */
+  vertical-align: middle;
+}
+body{
+  font-size: 14px;
+  font-family:'微软雅黑', 'Arial Narrow', Arial, sans-serif;
+}
