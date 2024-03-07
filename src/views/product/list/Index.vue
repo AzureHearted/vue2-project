@@ -64,7 +64,7 @@
     },
     methods: {
       onSubmit() {
-        // console.log("表单内容", this.formData.productName, this.formData.addTime);
+        console.log("表单内容", this.formData.productName, this.formData.addTime);
       },
     },
   };
