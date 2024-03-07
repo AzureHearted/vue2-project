@@ -32,7 +32,7 @@
       >
         <div class="title">月销售额</div>
         <div
-          id="charts"
+          id="chartsLine"
           style="width: 100%; height: 300px"
         ></div>
       </div>
@@ -40,7 +40,11 @@
         class="area"
         id="box1"
       >
-        比例分配
+        <div class="title">产品销售比例</div>
+        <div
+          id="chartsPie"
+          style="width: 100%; height: 300px"
+        ></div>
       </div>
     </div>
 
@@ -120,52 +124,137 @@
       return {
         totalData: {}, //首页数据统计
         orderData: {}, //订单统计信息
+        chartData: {}, //首页图表信息
       };
     },
     created() {
+      // console.log("Home页创建");
       //f 页面创建时调用api获取首页信息数据
+      // console.log("created-id", document.getElementById("chartsLine"));
       this.totalInfo();
       this.orderInfo();
-      // console.log("created-id", document.getElementById("charts"));
+      this.chartInfo(); //s 获取数据后绘制图表
     },
     mounted() {
+      // console.log("Home页挂载");
       //s 最早可以或DOM元素的生命周期函数 挂载完毕
-      console.log("id", document.getElementById("charts"));
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById("charts"));
-      // 绘制图表
-      myChart.setOption({
-        // title: {//标题
-        //   text: "ECharts 入门示例",
-        // },
-        tooltip: {},
-        xAxis: {
-          //横坐标
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-        },
-        yAxis: {}, //纵坐标 - 会自动创建数据
-        series: [
-          //图表内容
-          {
-            name: "销量",
-            type: "line", //bar：柱状图,line：折线图,pie：饼图,map：地图
-            data: [5, 20, 36, 10, 10, 20],
-          },
-        ],
-      });
+      // console.log("id", document.getElementById("chartsLine"));
+    },
+    updated() {
+      // console.log("Home更新");
     },
     methods: {
       //f 从api获取首页信息
       async totalInfo() {
         let res = await this.$api.totalInfo();
-        console.log("首页统计信息---", res.data.data.list);
+        // console.log("首页统计信息---", res.data.data.list);
         this.totalData = res.data.data.list;
       },
       //f 从api获取首页订单信息
       async orderInfo() {
         let res = await this.$api.orderInfo();
-        console.log("订单信息---", res.data.list);
+        // console.log("订单信息---", res.data.list);
         this.orderData = res.data.list;
+      },
+      //f 从api获取首页折线图数据统计 月销量、月销售额并且绘制图表
+      async chartInfo() {
+        let res = await this.$api.chartInfo();
+        console.log("图表信息---", res.data.result.data);
+        this.chartData = res.data.result.data;
+        //s 加工数据
+        let nameList = this.chartData.sale_money.map((x) => x.name);
+        let saleNum = this.chartData.sale_money.map((x) => x.num);
+        let saleAmount = this.chartData.sale_money.map((x) => x.total_amount);
+        let pieData = this.chartData.sale_money.map((x) => {
+          return {
+            name: x.name,
+            value: x.total_amount,
+          };
+        });
+        //s 绘制曲线图和柱状图
+        this.drawChart(nameList, saleNum, saleAmount);
+        //s 绘制饼图
+        this.drawPie(nameList, pieData);
+      },
+      //f 绘制折线图表
+      drawChart(nameList, saleNum, saleAmount) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById("chartsLine"));
+        // 绘制图表
+        myChart.setOption({
+          // title: {//标题
+          //   text: "ECharts 入门示例",
+          // },
+          tooltip: {
+            trigger: "axis",
+          },
+          xAxis: {
+            //横坐标
+            data: nameList,
+            axisLine: {
+              //坐标轴相关设置
+              lineStyle: {
+                // color: "skyblue", //轴线颜色
+              },
+            },
+            axisTick: {
+              //坐标轴刻度
+              alignWithLabel: true,
+            },
+          },
+          yAxis: {}, //纵坐标 - 会自动创建数据
+          legend: {
+            data: ["销售额", "销售量"],
+          },
+          series: [
+            //图表内容
+            {
+              name: "销售额",
+              type: "line", //bar：柱状图,line：折线图,pie：饼图,map：地图
+              data: saleAmount,
+              smooth: true, //曲线是否平滑
+              focus: "series",
+            },
+            {
+              name: "销售量",
+              type: "bar", //bar：柱状图,line：折线图,pie：饼图,map：地图
+              data: saleNum,
+              focus: "series",
+            },
+          ],
+        });
+      },
+      //f 绘制饼图
+      drawPie(nameList, data) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById("chartsPie"));
+        // 绘制图表
+        myChart.setOption({
+          // title: {//标题
+          //   text: "ECharts 入门示例",
+          // },
+          tooltip: {
+            trigger: "item",
+            formatter: "{a}</br>{b}：{d}%",
+          },
+          legend: {
+            type: "scroll",
+            orient: "vertical",
+            top: 0,
+            left: 0,
+            data: nameList,
+          },
+          series: [
+            //图表内容
+            {
+              type: "pie", //bar：柱状图,line：折线图,pie：饼图,map：地图
+              name: "产品销售额",
+              radius: "50%",
+              center: ["50%", "50%"],
+              data: data,
+            },
+          ],
+        });
       },
     },
     //f 过滤器--数据格式处理
@@ -180,9 +269,9 @@
 </script>
 
 <style lang="less" scoped>
-  .home {
-    margin: 10px;
-  }
+  // .home {
+  //   margin: 10px;
+  // }
 
   .header {
     display: flex;
@@ -274,7 +363,7 @@
     }
     .item {
       text-align: center;
-      font-size: 24px;
+      font-size: 20px;
       color: #333;
       .el-col {
         border-right: 1px solid #eee;

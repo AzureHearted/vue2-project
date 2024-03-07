@@ -16,7 +16,10 @@
       </div>
     </div>
     <!-- 内容区域 -->
-    <router-view></router-view>
+    <div class="wrapper">
+      <!-- 路由出口 -->
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -43,5 +46,9 @@
         cursor: pointer;
       }
     }
+  }
+  //内容区容器 
+  .wrapper{
+    padding: 10px;
   }
 </style>

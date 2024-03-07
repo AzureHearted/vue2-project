@@ -27,7 +27,7 @@
     },
     data() {
       return {
-        isCollapse: false, // 导航栏展开与收缩状态
+        isCollapse: false, //s 导航栏展开与收缩状态
       };
     },
     methods: {

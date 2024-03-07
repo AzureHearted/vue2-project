@@ -11,6 +11,10 @@ const api = {
   orderInfo() {
     return axios.get(base.orderInfo);
   },
+  //f 首页折线图数据统计 月销量、月销售额信息
+  chartInfo() {
+    return axios.get(base.chartInfo);
+  },
 };
 
 export default api;
