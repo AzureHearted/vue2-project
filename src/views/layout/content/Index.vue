@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 顶部区域 -->
     <div class="header">
       <div class="open">
@@ -35,20 +35,27 @@
 </script>
 
 <style lang="less" scoped>
-  .header {
-    height: 50px;
-    background: #1e78bf;
-    color: #fff;
-    line-height: 50px;
-    .open {
-      .iconfont {
-        font-size: 22px;
-        cursor: pointer;
+  .container {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    .header {
+      height: 50px;
+      background: #1e78bf;
+      color: #fff;
+      line-height: 50px;
+      .open {
+        .iconfont {
+          font-size: 22px;
+          cursor: pointer;
+        }
       }
     }
-  }
-  //内容区容器 
-  .wrapper{
-    padding: 10px;
+    //内容区容器
+    .wrapper {
+      flex: 1;
+      margin: 10px;
+      overflow-y:auto;
+    }
   }
 </style>

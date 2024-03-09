@@ -41,6 +41,7 @@
 
 <style lang="less" scoped>
   .layout {
+    height: 100%;
     .menu {
       background: #112f50;
       position: fixed;
@@ -49,6 +50,7 @@
       bottom: 0;
     }
     .content {
+      height: 100%;
       padding-left: 200px;
       transition: 0.3s ease-in-out;
     }

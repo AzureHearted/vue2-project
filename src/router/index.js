@@ -55,17 +55,17 @@ const routes = [
         children: [
           {
             path: "list", //访问路径：/order/list
-            name: "list",
+            name: "order-list",
             component: OrderList,
           },
           {
             path: "collection", //访问路径：/order/collection
-            name: "collection",
+            name: "order-collection",
             component: OrderCollection,
           },
           {
             path: "audit", //访问路径：/order/audit
-            name: "audit",
+            name: "order-audit",
             component: OrderAudit,
           },
         ],
@@ -78,7 +78,7 @@ const routes = [
         children: [
           {
             path: "list", //访问路径：/advert/list
-            name: "list",
+            name: "advert-list",
             component: AdvertList,
           },
         ],

@@ -23,7 +23,6 @@
         <div class="bottom">今日支付量：{{ totalData.pay | num }}</div>
       </div>
     </div>
-
     <!--2. 访问数据统计 ----------------->
     <div class="content">
       <div
@@ -47,7 +46,6 @@
         ></div>
       </div>
     </div>
-
     <!-- 3.  -->
     <!-- 最新内容 -->
     <div class="home-footer">
@@ -275,7 +273,7 @@
 
   .header {
     display: flex;
-    padding-right: 30px;
+    // padding-right: 30px;
 
     .item {
       flex: 1;

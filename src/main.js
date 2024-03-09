@@ -5,12 +5,11 @@ import store from "@/store"; //引入vuex仓库
 import "@/plugins/element";
 import "normalize.css";
 import "@/assets/css/base.css"; //引入基础样式
-import api from "@/api/index"; //f 挂载api
+import api from "@/api/index"; //s 引入api
+import moment from 'moment';//s 引入moment库
 
-Vue.prototype.$api = api;
-
-// import * as echarts from "echarts";//f 引入echarts
-// Vue.config.$echarts = echarts;
+Vue.prototype.$api = api;//z 将api挂载在vue原型上
+Vue.prototype.$moment = moment;//z 将moment对象挂载在vue原型上
 
 Vue.config.productionTip = false;
 

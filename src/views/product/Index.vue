@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <!-- 产品管理 -->
-    <router-view></router-view>
-  </div>
+  <!-- 产品管理 -->
+  <router-view></router-view>
 </template>
 
 <script>
-  export default {
-    
-  }
+  export default {};
 </script>
 
 <style lang="less" scoped>
