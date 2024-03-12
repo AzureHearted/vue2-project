@@ -137,6 +137,9 @@
       // console.log("Home页挂载");
       //s 最早可以或DOM元素的生命周期函数 挂载完毕
       // console.log("id", document.getElementById("chartsLine"));
+      // this.totalInfo();
+      // this.orderInfo();
+      // this.chartInfo(); //s 获取数据后绘制图表
     },
     updated() {
       // console.log("Home更新");
@@ -177,7 +180,9 @@
       //f 绘制折线图表
       drawChart(nameList, saleNum, saleAmount) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById("chartsLine"));
+        const dom = document.getElementById("chartsLine");
+        if (!dom) return;//没拿到dom就停止操作
+        let myChart = echarts.init(dom);
         // 绘制图表
         myChart.setOption({
           // title: {//标题
@@ -225,7 +230,9 @@
       //f 绘制饼图
       drawPie(nameList, data) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById("chartsPie"));
+        const dom = document.getElementById("chartsPie");
+        if (!dom) return;//没拿到dom就停止操作
+        var myChart = echarts.init(dom);
         // 绘制图表
         myChart.setOption({
           // title: {//标题

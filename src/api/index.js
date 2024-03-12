@@ -17,11 +17,6 @@ const api = {
     return axios.get(base.chartInfo);
   },
   ...product, //z 使用对象析构的方式导入产品相关api
-  //f 商品查询接口 参数：search
-  // params={search:'xxx'}
-  searchInfo(params) {
-    return axios.get(base.searchInfo, {params});
-  },
 };
 
 export default api;

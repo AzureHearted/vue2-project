@@ -29,7 +29,7 @@ const routes = [
         name: "home",
         component: Home,
       },
-      //f 产品管理 路由配置
+      //w 产品管理 路由配置
       {
         path: "/product",
         name: "product",
@@ -47,7 +47,7 @@ const routes = [
           },
         ],
       },
-      //f 订单管理 路由配置
+      //w 订单管理 路由配置
       {
         path: "/order",
         name: "order",
@@ -70,7 +70,7 @@ const routes = [
           },
         ],
       },
-      //f 广告分类 路由配置
+      //w 广告分类 路由配置
       {
         path: "/advert",
         name: "advert",
@@ -85,6 +85,7 @@ const routes = [
       },
     ],
   },
+  //w 登录页 路由配置
   {
     path: "/login",
     name: "login",

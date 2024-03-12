@@ -1,10 +1,10 @@
 <template>
   <div class="layout">
-    <!-- 左侧导航 -->
+    <!-- w左侧导航 -->
     <div class="menu">
       <Menu :isCollapse="isCollapse"></Menu>
     </div>
-    <!-- 右侧内容 -->
+    <!-- w右侧内容 -->
     <div
       class="content"
       :class="{small: isCollapse}"

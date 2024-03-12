@@ -3,7 +3,7 @@
     class="container"
     ref="container"
   >
-    <!-- 产品搜索 -->
+    <!-- w产品搜索 -->
     <!-- 
       el-form 表单
         :inline="true" 设置inline可以让表单域变为行内的表单域
@@ -70,7 +70,7 @@
         </el-button>
       </div>
     </div>
-    <!-- 产品列表 -->
+    <!-- w产品列表 -->
     <div
       class="content"
       ref="content"
@@ -119,6 +119,7 @@
                 }"
               >
                 <el-image
+                  v-if="JSON.parse(scope.row.image).length"
                   :src="JSON.parse(scope.row.image)[0]"
                   :alt="scope.row.title"
                   fit="fit"
@@ -223,6 +224,7 @@
         currentPage: 1, //s 当前页码
         total: 40, //s 条目总数
         pageSize: 10, //s 每页显示数量
+        test: 10,
       };
     },
     created() {
@@ -242,7 +244,25 @@
       },
       //f 处理删除行
       handleDelete(index, row) {
-        console.log("删除行：", index, row);
+        console.log("删除行：", index, row.id);
+        this.$confirm("此操作将永久删除该商品信息, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.removeProductById(row.id);
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
+          });
       },
       //f 获取列表数据 page 页码
       async getListInfo(page) {
@@ -255,6 +275,7 @@
       },
       //f 处理表单页码切换
       hanldeCurrentChange(page) {
+        this.currentPage = page;
         this.getListInfo(page);
       },
       //f 商品查询接口
@@ -266,11 +287,29 @@
         let res = await this.$api.searchInfo({search: keyword});
         // console.log("查询结果：", res.data);
         if (res.data.status === 200) {
+          //w 判断是否有数据
           this.tableData = res.data.result;
           this.total = res.data.result.length;
+          //j 这里如果数据过多必须进行分页处理，但目后端并未进行查询的分页处理
+          //j 因此要么在前端进行分页处理、要么在后端进行分页处理
+          this.pageSize = res.data.result.length;
         } else {
           this.tableData = [];
           this.total = 0;
+          this.pageSize = 1;
+        }
+      },
+      //f 商品删除接口
+      async removeProductById(id) {
+        let res = await this.$api.removeProductById({id: id});
+        console.log(res.data);
+        if (res.status === 200) {
+          if (this.tableData.length === 1) {
+            this.getListInfo(this.currentPage - 1);
+          } else {
+            this.getListInfo(this.currentPage);
+          }
+          // this.getListInfo(1)
         }
       },
       //f input失去焦点时进行判断
