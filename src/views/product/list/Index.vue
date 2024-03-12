@@ -58,6 +58,7 @@
           type="warning"
           icon="el-icon-plus"
           size="small"
+          @click="toAddProduct"
         >
           添加商品
         </el-button>
@@ -65,6 +66,7 @@
           type="danger"
           icon="el-icon-delete"
           size="small"
+          @click="handleBatchDelete"
         >
           批量删除
         </el-button>
@@ -85,6 +87,7 @@
         :header-cell-style="{color: '#333', textAlign: 'center'}"
         :cell-style="{textAlign: 'center'}"
         highlight-selection-row
+        @selection-change="selectionChange"
       >
         <!-- 选择列 -->
         <el-table-column
@@ -224,7 +227,7 @@
         currentPage: 1, //s 当前页码
         total: 40, //s 条目总数
         pageSize: 10, //s 每页显示数量
-        test: 10,
+        selectedIds: [], //s 用于记录选中的id列表
       };
     },
     created() {
@@ -232,6 +235,11 @@
       this.getListInfo(1);
     },
     methods: {
+      //f 跳转到添加商品页面
+      toAddProduct() {
+        console.log("跳转到添加商品页面——————");
+        this.$router.push({name: "productPage", params: {mode: "add"}});
+      },
       removeHTMLTag, //w 注册方法
       //f 调用查询接口查询商品
       onSubmit() {
@@ -250,8 +258,8 @@
           cancelButtonText: "取消",
           type: "warning",
         })
-          .then(() => {
-            this.removeProductById(row.id);
+          .then(async () => {
+            await this.removeProductById(row.id);
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -261,6 +269,43 @@
             this.$message({
               type: "info",
               message: "已取消删除",
+            });
+          });
+      },
+      //f 处理删除行(批量)
+      handleBatchDelete() {
+        if (this.selectedIds.length < 1) {
+          this.$message({
+            type: "warning",
+            message: "请选勾选要删除的商品信息!",
+          });
+          return;
+        }
+        console.log("删除多行(id)：", this.selectedIds);
+        this.$confirm("此操作将永久删除所有当前页选中的商品信息, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(async () => {
+            let res = await this.batchRemoveProductById(this.selectedIds);
+            console.log("是否删除成功:", res.success);
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            } else {
+              this.$message({
+                type: "warning",
+                message: "删除失败!",
+              });
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消批量删除",
             });
           });
       },
@@ -302,14 +347,29 @@
       //f 商品删除接口
       async removeProductById(id) {
         let res = await this.$api.removeProductById({id: id});
-        console.log(res.data);
+        // console.log(res.data);
         if (res.status === 200) {
-          if (this.tableData.length === 1) {
-            this.getListInfo(this.currentPage - 1);
+          if (this.tableData.length - 1 === 0) {
+            this.getListInfo(this.currentPage - 1 > 1 ? this.currentPage - 1 : this.currentPage);
           } else {
             this.getListInfo(this.currentPage);
           }
           // this.getListInfo(1)
+        }
+      },
+      //f 商品批量删除接口
+      async batchRemoveProductById(ids) {
+        let res = await this.$api.batchRemoveProductById({ids});
+        console.log(res.data);
+        if (res.status === 200) {
+          if (this.tableData.length - ids.length === 0) {
+            this.getListInfo(this.currentPage - 1 > 1 ? this.currentPage - 1 : this.currentPage);
+          } else {
+            this.getListInfo(this.currentPage);
+          }
+          return {success: true};
+        } else {
+          return {success: false};
         }
       },
       //f input失去焦点时进行判断
@@ -317,6 +377,11 @@
         if (!this.formData.productName) {
           this.getListInfo(1);
         }
+      },
+      //f 当table选中数据发生改变时同步跟新当前组件中的selectedIds
+      selectionChange(selection) {
+        this.selectedIds = selection.map((x) => x.id);
+        console.log("当前选项", this.selectedIds);
       },
     },
   };

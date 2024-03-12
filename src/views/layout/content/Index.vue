@@ -116,7 +116,7 @@
     //内容区容器
     .wrapper {
       flex: 1;
-      margin: 10px;
+      padding: 10px;
       overflow-y: auto;
     }
   }

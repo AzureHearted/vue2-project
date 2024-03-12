@@ -17,6 +17,9 @@ const api = {
     return axios.get(base.chartInfo);
   },
   ...product, //z 使用对象析构的方式导入产品相关api
+  itemCategory() {
+    return axios.get(base.itemCategory);
+  },
 };
 
 export default api;

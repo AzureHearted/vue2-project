@@ -5,6 +5,8 @@ const base = {
   productList: "/api/goods/projectList", //w 商品列表：获取分页(参数：page 页码)
   searchInfo: "/api/goods/search", //w 商品查询接口 参数：search
   removeProductById: "/api/goods/deleteItemById", //w 商品信息删除接口 参数：id
+  batchRemoveProductById: "/api/goods/batchDelete", //w 商品信息批量删除接口 参数: Array(String)
+  uploadUrl: "/api/upload",//w 图片上传接口
 };
 
 export default {
@@ -19,5 +21,8 @@ export default {
   },
   removeProductById(params) {
     return axios.get(base.removeProductById, {params});
+  },
+  batchRemoveProductById(params) {
+    return axios.get(base.batchRemoveProductById, {params});
   },
 };

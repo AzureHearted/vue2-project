@@ -4,18 +4,20 @@ import Layout from "@/views/layout/Index.vue";
 import Login from "@/views/login/Index.vue";
 import Home from "@/views/home/Home.vue";
 
-//* 这里使用异步加载的方式加载
+//w 异步加载组件
+//s 商品管理
 const Product = () => import("@/views/product/Index.vue");
 const ProductList = () => import("@/views/product/list/Index.vue");
-const Category = () => import("@/views/product/category/Index.vue");
-
+const ProductCategory = () => import("@/views/product/category/Index.vue");
+const ProductPage = () => import("@/views/product/list/ProductPage.vue");
+//s 订单管理
 const Order = () => import("@/views/order/Index.vue");
 const OrderList = () => import("@/views/order/list/Index.vue");
 const OrderCollection = () => import("@/views/order/collection/Index.vue");
 const OrderAudit = () => import("@/views/order/audit/Index.vue");
-
+//s 广告分类
 const Advert = () => import("@/views/advert/Index.vue");
-const AdvertList = () => import("@/views/advert/list/Index.vue");
+const AdverList = () => import("@/views/advert/list/Index.vue");
 
 Vue.use(VueRouter);
 
@@ -43,7 +45,16 @@ const routes = [
           {
             path: "category", //访问路径：/product/category
             name: "product-category",
-            component: Category,
+            component: ProductCategory,
+          },
+          {
+            path: "product-page-:mode",
+            name: "productPage",
+            component: ProductPage,
+            meta: {
+              //w 配置一个左侧菜单导航高亮的标识
+              activeMenu: "/product/list",
+            },
           },
         ],
       },
@@ -79,7 +90,7 @@ const routes = [
           {
             path: "list", //访问路径：/advert/list
             name: "advert-list",
-            component: AdvertList,
+            component: AdverList,
           },
         ],
       },
