@@ -27,11 +27,11 @@
     },
     data() {
       return {
-        isCollapse: false, //s 导航栏展开与收缩状态
+        isCollapse: false, // s 导航栏展开与收缩状态
       };
     },
     methods: {
-      //s 用于控制导航栏的展开与收缩
+      // s 用于控制导航栏的展开与收缩
       changeShow() {
         this.isCollapse = !this.isCollapse;
       },

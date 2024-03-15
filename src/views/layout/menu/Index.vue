@@ -76,16 +76,16 @@
     props: ["isCollapse"],
     data() {
       return {
-        // activeIndex: "", //w (废弃)
+        // activeIndex: "", // w (废弃)
       };
     },
     watch: {
-      //f 监听路由变化(废弃)
+      // f 监听路由变化(废弃)
       // $route(to, from) {
       //   console.log("路由变化---", to);
-      //   //w 判断当前路由里面是否含有meta对象
+      //   // w 判断当前路由里面是否含有meta对象
       //   let {meta, path} = to;
-      //   //s 判断meta中是否包含activeMenu,包含则返回该值,不存在就返回path
+      //   // s 判断meta中是否包含activeMenu,包含则返回该值,不存在就返回path
       //   this.activeIndex = meta.activeMenu ? meta.activeMenu : path;
       // },
     },

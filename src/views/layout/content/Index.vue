@@ -64,7 +64,7 @@
       };
     },
     created() {
-      //w 每秒进行一次时间更新(首次立即执行)
+      // w 每秒进行一次时间更新(首次立即执行)
       this.reNewTime();
       setInterval(() => {
         this.reNewTime();
@@ -74,7 +74,7 @@
       changMenu() {
         this.$emit("changShow");
       },
-      //f 更新时间
+      // f 更新时间
       reNewTime() {
         this.time = this.$moment().format("YYYY年MM月DD日 HH:mm:ss");
       },

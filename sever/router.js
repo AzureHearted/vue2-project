@@ -15,6 +15,7 @@ const vipLogin = require("./login/data/vip_login.json");
 const adminLogin = require("./login/data/admin_login.json");
 const adminPermission = require("./login/data/admin_permission.json");
 const vipPermission = require("./login/data/vip_permission.json");
+const path = require("path");
 
 /* 
   登录：
@@ -197,10 +198,50 @@ router.get("/goods/search", (req, res) => {
 });
 
 /**
+ * f 通过id查询商品信息的接口 id
+ * 参数：id
+ */
+router.get("/goods/productInfoById", (req, res) => {
+  var id = req.query.id;
+  const sql = "select * from project where id =" + id;
+  sqlFn(sql, null, (result) => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result: result[0],
+      });
+    } else {
+      res.send({
+        status: 500,
+        msg: "暂无数据",
+      });
+    }
+  });
+});
+
+/**
  * 商品删除接口 id
  */
 router.get("/goods/deleteItemById", (req, res) => {
   var id = req.query.id;
+  // w 先删除与商品关联的图片
+  const sqlGetInfo = "select * from project where id =" + id;
+  sqlFn(sqlGetInfo, null, (result) => {
+    if (result.length > 0) {
+      // w 拿到结果信息
+      let info = result[0];
+      // w 解析图片url数组
+      let urls = [...JSON.parse(info.image)];
+      // console.log("待删除路径列表", urls);
+      urls.forEach((url) => {
+        let filePath = decodeURIComponent(new URL(url).pathname.slice(1));
+        console.log("正在删除文件：", filePath);
+        const dirpath = path.join(__dirname, "upload");
+        fs.unlink(path.join(dirpath, filePath), (err) => {});
+      });
+    }
+  });
+  // w 再删除商品信息
   const sql = "delete from project where id=?";
   const arr = [id];
   sqlFn(sql, arr, (result) => {
@@ -258,7 +299,9 @@ var storage = multer.diskStorage({
     cb(null, "./upload/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    // s 解决中文文件名乱码问题
+    const encodedFilename = Buffer.from(file.originalname, "latin1").toString("utf8");
+    cb(null, Date.now() + "-" + encodedFilename);
   },
 });
 
@@ -301,6 +344,31 @@ router.post("/batchUpload", upload.single("file"), function (req, res, next) {
     href: file.path,
     url: "http://localhost:9898/" + file.path.slice(7),
     alt: file.name,
+  });
+});
+
+/**
+ * f 文件删除接口
+ */
+router.get("/upload/deleteFile", (req, res) => {
+  // s 获取要删除的路径参数 http://localhost:7788/a.jpg
+  let url = new URL(req.query.url);
+  let filePath = decodeURIComponent(url.pathname.slice(1));
+  const dirpath = path.join(__dirname, "upload");
+  fs.unlink(path.join(dirpath, filePath), (err) => {
+    if (err) {
+      res.send({
+        status: 500,
+        msg: "删除失败",
+        base: dirpath,
+        path: filePath,
+      });
+    } else {
+      res.send({
+        status: 200,
+        msg: "删除成功",
+      });
+    }
   });
 });
 

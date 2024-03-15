@@ -11,7 +11,6 @@
         lazy	是否懒加载子节点，需与 load 方法结合使用	boolean	—	false
   -->
   <el-tree
-    :data="data"
     :props="defaultProps"
     @node-click="handleNodeClick"
     accordion
@@ -28,28 +27,36 @@
           label: "name",
           children: "children",
         },
-        data: [],
       };
     },
     created() {},
     methods: {
-      // async getItemCategory() {
-      //   let res = await this.$api.itemCategory();
-      //   if (res.status === 200) {
-      //     // console.log("原始数据", res.data.result);
-      //     // console.log("处理后的数据", this.processingRowCategoryInfo(res.data.result));
-      //     this.categoryData = this.processingRowCategoryInfo(res.data.result);
-      //   }
-      // },
-      //f 懒加载节点
-      load(node, resolve) {
-        console.log('节点懒加载',node, resolve);
+      // f 懒加载节点
+      async load(node, resolve) {
+        // console.log("节点懒加载", node, resolve);
+        if (node.level === 0) {
+          // w 加载一级节点
+          let res = await this.$api.selectItemCategoryByParentId();
+          // console.log("一级类目-----", res.data);
+          if (res.status === 200) {
+            return resolve(res.data.result);
+          }
+        } else if (node.level === 1) {
+          // w 加载二级节点
+          let res = await this.$api.selectItemCategoryByParentId({type: node.data.cid});
+          // console.log("二级类目-----", res.data);
+          if (res.status === 200) {
+            return resolve(res.data.result);
+          }
+        } else {
+          // w 超过二级则不加载
+          return resolve([]);
+        }
       },
+      // f 节点点击回调
       handleNodeClick(rawData, vNode, tree) {
         // console.log("点击了节点", "原始数据:", rawData, "节点对象:", vNode, "Tree对象:", tree);
-        // this.form.category = rawData.name;
-        // this.form.cid = rawData.cid;
-        this.$emit("nodeClick", rawData.name, rawData.cid);
+        this.$emit("nodeClick", rawData);
       },
     },
   };

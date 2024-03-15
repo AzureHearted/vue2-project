@@ -58,7 +58,7 @@
           type="warning"
           icon="el-icon-plus"
           size="small"
-          @click="toAddProduct"
+          @click="toProductAddPage"
         >
           添加商品
         </el-button>
@@ -87,7 +87,7 @@
         :header-cell-style="{color: '#333', textAlign: 'center'}"
         :cell-style="{textAlign: 'center'}"
         highlight-selection-row
-        @selection-change="selectionChange"
+        @selection-change="handleSelectionChange"
       >
         <!-- 选择列 -->
         <el-table-column
@@ -110,24 +110,37 @@
               placement="top"
               :title="scope.row.title"
               trigger="hover"
-              :open-delay="500"
-              :close-delay="100"
+              :open-delay="100"
+              :close-delay="50"
+              width="fit-content"
             >
-              <span slot="reference">{{ scope.row.title }}</span>
+              <div slot="reference">
+                <span
+                  style="color: blue; cursor: pointer"
+                  @click="toProductDetailPage(scope.row)"
+                >
+                  {{ scope.row.title }}
+                </span>
+              </div>
               <div
                 :style="{
                   display: 'flex',
                   justifyContent: 'center',
-                  alignItems: 'center',
                 }"
               >
-                <el-image
+                <div
+                  style="display: flex; flex-flow: row wrap; gap: 5px"
                   v-if="JSON.parse(scope.row.image).length"
-                  :src="JSON.parse(scope.row.image)[0]"
-                  :alt="scope.row.title"
-                  fit="fit"
-                  style="width: 100px; height: 100px"
-                ></el-image>
+                >
+                  <el-image
+                    v-for="(item, index) in JSON.parse(scope.row.image)"
+                    :key="index"
+                    :src="item"
+                    :alt="scope.row.title"
+                    style="height: 128px; aspect-ratio: auto"
+                    :preview-src-list="JSON.parse(scope.row.image)"
+                  ></el-image>
+                </div>
               </div>
             </el-popover>
           </template>
@@ -211,46 +224,69 @@
 <script>
   import Pagination from "@/components/pagination/Pagination.vue";
   import {removeHTMLTag} from "@/utils/common";
+  import {mapMutations} from "vuex"; /** w 引入vuex的辅助函数 */
 
   export default {
     components: {Pagination},
     data() {
       return {
-        //w 查询表单数据
+        // w 查询表单数据
         formData: {
           productName: "",
           addTime: "",
         },
-        //w 列表数据
-        tableData: [], //s 表单数据(数组对象)
-        //w 分页参数
-        currentPage: 1, //s 当前页码
-        total: 40, //s 条目总数
-        pageSize: 10, //s 每页显示数量
-        selectedIds: [], //s 用于记录选中的id列表
+        // w 列表数据
+        tableData: [], // s 表单数据(数组对象)
+        // w 分页参数
+        currentPage: 1, // s 当前页码
+        total: 0, // s 条目总数
+        pageSize: 10, // s 每页显示数量
+        selectedIds: [], // s 用于记录选中的id列表
       };
     },
     created() {
-      //z 创建后获取第1页的表单数据
+      // z 创建后获取第1页的表单数据
       this.getListInfo(1);
     },
     methods: {
-      //f 跳转到添加商品页面
-      toAddProduct() {
+      ...mapMutations("product", ["changeMode", "setRowData"]) /** w vuex的组件绑定函数 */,
+      // f 跳转到添加商品页面
+      toProductAddPage() {
         console.log("跳转到添加商品页面——————");
+        this.setRowData();
+        this.changeMode("add");
         this.$router.push({name: "productPage", params: {mode: "add"}});
       },
-      removeHTMLTag, //w 注册方法
-      //f 调用查询接口查询商品
+      // f 跳转到指定商品的编辑页面
+      toProductEditPage(info) {
+        console.log(`跳转到商品${info.id}的编辑页面——————`);
+        // s 跳转编辑界面———— 方式1:通过路由传参
+        // this.$router.push({name: "productPage", params: {id: info.id, mode: "edit"}});
+        // s 跳转编辑界面———— 方式2:通过Vuex传参
+        // w 存储当前行的数据-->跳转到商品页面-->获取行数据-->商品页面展示信息
+        this.setRowData(info);
+        this.changeMode("edit");
+        this.$router.push({name: "productPage", params: {mode: "edit"}});
+      },
+      // f 跳转到指定商品的详情页
+      toProductDetailPage(info) {
+        console.log(`跳转到商品${info.id}的详情页面——————`);
+        this.setRowData(info);
+        this.changeMode("show");
+        this.$router.push({name: "productPage", params: {mode: "show"}});
+      },
+      removeHTMLTag, // w 注册方法
+      // f 调用查询接口查询商品
       onSubmit() {
         // console.log("表单内容：", this.formData);
         this.search(this.formData.productName);
       },
-      //f 处理编辑行
+      // f 处理编辑行
       handleEdit(index, row) {
-        console.log("编辑行：", index, row);
+        console.log("跳转到商品编辑页面——————", index, row);
+        this.toProductEditPage(row);
       },
-      //f 处理删除行
+      // f 处理删除行
       handleDelete(index, row) {
         console.log("删除行：", index, row.id);
         this.$confirm("此操作将永久删除该商品信息, 是否继续?", "提示", {
@@ -272,7 +308,7 @@
             });
           });
       },
-      //f 处理删除行(批量)
+      // f 处理删除行(批量)
       handleBatchDelete() {
         if (this.selectedIds.length < 1) {
           this.$message({
@@ -282,15 +318,16 @@
           return;
         }
         console.log("删除多行(id)：", this.selectedIds);
-        this.$confirm("此操作将永久删除所有当前页选中的商品信息, 是否继续?", "提示", {
+        this.$confirm("此操作将永久删除所有选中的商品信息, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          title: "标题",
         })
           .then(async () => {
             let res = await this.batchRemoveProductById(this.selectedIds);
-            console.log("是否删除成功:", res.success);
-            if (res.success) {
+            // console.log("是否删除成功:", res.status);
+            if (res.status === "success") {
               this.$message({
                 type: "success",
                 message: "删除成功!",
@@ -299,6 +336,7 @@
               this.$message({
                 type: "warning",
                 message: "删除失败!",
+                
               });
             }
           })
@@ -309,30 +347,30 @@
             });
           });
       },
-      //f 获取列表数据 page 页码
+      // f 获取列表数据 page 页码
       async getListInfo(page) {
         const res = await this.$api.productList({page});
         // console.log(res.data);
-        //s 分页数据&表单数据更新
+        // s 分页数据&表单数据更新
         this.pageSize = res.data.pageSize;
         this.total = res.data.total;
         this.tableData = res.data.data;
       },
-      //f 处理表单页码切换
+      // f 处理表单页码切换
       hanldeCurrentChange(page) {
         this.currentPage = page;
         this.getListInfo(page);
       },
-      //f 商品查询接口
+      // f 商品查询接口
       async search(keyword) {
         if (!keyword) {
-          //w 查询内容为空
+          // w 查询内容为空
           return;
         }
         let res = await this.$api.searchInfo({search: keyword});
         // console.log("查询结果：", res.data);
         if (res.data.status === 200) {
-          //w 判断是否有数据
+          // w 判断是否有数据
           this.tableData = res.data.result;
           this.total = res.data.result.length;
           //j 这里如果数据过多必须进行分页处理，但目后端并未进行查询的分页处理
@@ -344,44 +382,44 @@
           this.pageSize = 1;
         }
       },
-      //f 商品删除接口
+      // f 商品删除接口
       async removeProductById(id) {
         let res = await this.$api.removeProductById({id: id});
         // console.log(res.data);
         if (res.status === 200) {
           if (this.tableData.length - 1 === 0) {
-            this.getListInfo(this.currentPage - 1 > 1 ? this.currentPage - 1 : this.currentPage);
+            this.getListInfo(this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage);
           } else {
             this.getListInfo(this.currentPage);
           }
           // this.getListInfo(1)
         }
       },
-      //f 商品批量删除接口
+      // f 商品批量删除接口
       async batchRemoveProductById(ids) {
         let res = await this.$api.batchRemoveProductById({ids});
-        console.log(res.data);
+        // console.log(res.data);
         if (res.status === 200) {
           if (this.tableData.length - ids.length === 0) {
-            this.getListInfo(this.currentPage - 1 > 1 ? this.currentPage - 1 : this.currentPage);
+            this.getListInfo(this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage);
           } else {
             this.getListInfo(this.currentPage);
           }
-          return {success: true};
+          return {status: "success"};
         } else {
-          return {success: false};
+          return {status: "fail"};
         }
       },
-      //f input失去焦点时进行判断
+      // f input失去焦点时进行判断
       inputBlur() {
         if (!this.formData.productName) {
           this.getListInfo(1);
         }
       },
-      //f 当table选中数据发生改变时同步跟新当前组件中的selectedIds
-      selectionChange(selection) {
+      // f 当table选中数据发生改变时同步跟新当前组件中的selectedIds
+      handleSelectionChange(selection) {
         this.selectedIds = selection.map((x) => x.id);
-        console.log("当前选项", this.selectedIds);
+        console.log("选项变化————", this.selectedIds, selection);
       },
     },
   };

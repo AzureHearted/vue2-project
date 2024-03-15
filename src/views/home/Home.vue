@@ -115,7 +115,7 @@
 </template>
 
 <script>
-  import * as echarts from "echarts"; //f 引入echarts
+  import * as echarts from "echarts"; // f 引入echarts
 
   export default {
     data() {
@@ -127,42 +127,42 @@
     },
     created() {
       // console.log("Home页创建");
-      //f 页面创建时调用api获取首页信息数据
+      // f 页面创建时调用api获取首页信息数据
       // console.log("created-id", document.getElementById("chartsLine"));
       this.totalInfo();
       this.orderInfo();
-      this.chartInfo(); //s 获取数据后绘制图表
+      this.chartInfo(); // s 获取数据后绘制图表
     },
     mounted() {
       // console.log("Home页挂载");
-      //s 最早可以或DOM元素的生命周期函数 挂载完毕
+      // s 最早可以或DOM元素的生命周期函数 挂载完毕
       // console.log("id", document.getElementById("chartsLine"));
       // this.totalInfo();
       // this.orderInfo();
-      // this.chartInfo(); //s 获取数据后绘制图表
+      // this.chartInfo(); // s 获取数据后绘制图表
     },
     updated() {
       // console.log("Home更新");
     },
     methods: {
-      //f 从api获取首页信息
+      // f 从api获取首页信息
       async totalInfo() {
         let res = await this.$api.totalInfo();
         // console.log("首页统计信息---", res.data.data.list);
         this.totalData = res.data.data.list;
       },
-      //f 从api获取首页订单信息
+      // f 从api获取首页订单信息
       async orderInfo() {
         let res = await this.$api.orderInfo();
         // console.log("订单信息---", res.data.list);
         this.orderData = res.data.list;
       },
-      //f 从api获取首页折线图数据统计 月销量、月销售额并且绘制图表
+      // f 从api获取首页折线图数据统计 月销量、月销售额并且绘制图表
       async chartInfo() {
         let res = await this.$api.chartInfo();
-        console.log("图表信息---", res.data.result.data);
+        // console.log("图表信息---", res.data.result.data);
         this.chartData = res.data.result.data;
-        //s 加工数据
+        // s 加工数据
         let nameList = this.chartData.sale_money.map((x) => x.name);
         let saleNum = this.chartData.sale_money.map((x) => x.num);
         let saleAmount = this.chartData.sale_money.map((x) => x.total_amount);
@@ -172,12 +172,12 @@
             value: x.total_amount,
           };
         });
-        //s 绘制曲线图和柱状图
+        // s 绘制曲线图和柱状图
         this.drawChart(nameList, saleNum, saleAmount);
-        //s 绘制饼图
+        // s 绘制饼图
         this.drawPie(nameList, pieData);
       },
-      //f 绘制折线图表
+      // f 绘制折线图表
       drawChart(nameList, saleNum, saleAmount) {
         // 基于准备好的dom，初始化echarts实例
         const dom = document.getElementById("chartsLine");
@@ -227,7 +227,7 @@
           ],
         });
       },
-      //f 绘制饼图
+      // f 绘制饼图
       drawPie(nameList, data) {
         // 基于准备好的dom，初始化echarts实例
         const dom = document.getElementById("chartsPie");
@@ -262,7 +262,7 @@
         });
       },
     },
-    //f 过滤器--数据格式处理
+    // f 过滤器--数据格式处理
     filters: {
       num(value) {
         // 23466 -- 23,466
