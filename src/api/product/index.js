@@ -1,16 +1,18 @@
 import axios from "@/utils/request";
 
+// w 环境变量获取api
+const apiUrl = process.env.VUE_APP_BASE_URL;
 const base = {
   // w 产品管理相关接口地址
-  productList: "/api/goods/projectList", // w 商品列表：获取分页(参数：page 页码)
-  searchInfo: "/api/goods/search", // w 商品查询接口 参数：search
-  productInfoById: "/api/goods/productInfoById", //w 通过id查询商品信息接口 参数: id
-  removeProductById: "/api/goods/deleteItemById", // w 商品信息删除接口 参数：id
-  batchRemoveProductById: "/api/goods/batchDelete", // w 商品信息批量删除接口 参数: Array(String)
+  productList: apiUrl + "/goods/projectList", // w 商品列表：获取分页(参数：page 页码)
+  searchInfo: apiUrl + "/goods/search", // w 商品查询接口 参数：search
+  productInfoById: apiUrl + "/goods/productInfoById", //w 通过id查询商品信息接口 参数: id
+  removeProductById: apiUrl + "/goods/deleteItemById", // w 商品信息删除接口 参数：id
+  batchRemoveProductById: apiUrl + "/goods/batchDelete", // w 商品信息批量删除接口 参数: Array(String)
   // w 类目选择接口 说明：接口不同的参数cid 返回不同的类目数据 后台接受变量：type
-  selectItemCategoryByParentId: "/api/goods/itemCategory/selectItemCategoryByParentId",
-  addProduct: "/api/goods/item/insertTbItem", // w 商品添加接口
-  updateProduct: "/api/goods/item/updateTbItem", //w 商品信息更新接口
+  selectItemCategoryByParentId: apiUrl + "/goods/itemCategory/selectItemCategoryByParentId",
+  addProduct: apiUrl + "/goods/item/insertTbItem", // w 商品添加接口
+  updateProduct: apiUrl + "/goods/item/updateTbItem", //w 商品信息更新接口
 };
 
 export default {

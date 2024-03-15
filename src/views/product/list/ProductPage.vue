@@ -363,6 +363,8 @@
           this.form.image = val.map((x) => {
             if (x.response) {
               let url = x.response.url;
+              // console.log("当前处理对象:", x);
+              console.log("当前host:", host);
               return new URL(host + "/" + url.slice(7)).href;
             } else {
               return x.url;
