@@ -253,7 +253,8 @@
       // f 跳转到添加商品页面
       toProductAddPage() {
         console.log("跳转到添加商品页面——————");
-        this.setRowData();
+        // w 传入一个空对象初始化store
+        this.setRowData({});
         this.changeMode("add");
         this.$router.push({name: "productPage", params: {mode: "add"}});
       },
@@ -336,7 +337,6 @@
               this.$message({
                 type: "warning",
                 message: "删除失败!",
-                
               });
             }
           })

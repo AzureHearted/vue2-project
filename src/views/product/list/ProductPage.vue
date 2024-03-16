@@ -196,7 +196,8 @@
       handleReset() {
         // w 调用表单的组件的重置方法
         // this.$refs["form"].resetFields();
-        this.form = JSON.parse(JSON.stringify(this.rowData)); /** s深拷贝 */
+        this.form = JSON.parse(JSON.stringify(this.rowData)); /** s深拷贝_JSON方法*/
+        // this.form = {...this.rowData}; /** s浅拷贝 ES6 对象展开语法 是适用于全是String Boolean Number 类型的属性的对象*/
         // z 对一些信息进行手动重置(编辑模式下需要还原到原始状态,而不是清空)
         if (this.mode === "add") {
           this.form.cid = "";
@@ -223,9 +224,9 @@
             if (this.unUploadAmount === 0) {
               // w 信息验证无误则调用api进行表单提交
               if (this.mode == "add") {
-                this.addProduct();
+                this.addProduct(this.form);
               } else if (this.mode == "edit") {
-                this.updataProduct();
+                this.updataProduct(this.form);
               }
             } else {
               this.$message({
@@ -242,9 +243,8 @@
         });
       },
       // f 新增商品表单提交(api调用)
-      async addProduct() {
+      async addProduct({title, image, sellPoint, price, cid, category, num, descs}) {
         // console.log("添加商品信息——————");
-        let {title, image, sellPoint, price, cid, category, num, descs} = this.form;
         let res = await this.$api.addProduct({
           title,
           // w 需要进行JSON序列化处理转为字符串
@@ -272,9 +272,8 @@
         }
       },
       // f (api调用)更新商品信息
-      async updataProduct() {
+      async updataProduct({id, title, image, sellPoint, price, cid, category, num, descs}) {
         // console.log("更新商品信息——————");
-        let {id, title, image, sellPoint, price, cid, category, num, descs} = this.form;
         let res = await this.$api.updateProduct({
           id,
           title,
@@ -333,7 +332,7 @@
           };
         });
         // w 更新rowData
-        this.setRowData(JSON.parse(JSON.stringify(this.form)));
+        this.setRowData(this.form);
       },
       // f 处理树形列表节点点击事件
       handleNodeClick(rawData) {
