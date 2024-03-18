@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <!-- 订单管理 -->
-    <router-view></router-view>
-  </div>
+  <!-- 订单管理 -->
+  <router-view></router-view>
 </template>
 
 <script>

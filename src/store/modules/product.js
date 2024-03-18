@@ -1,7 +1,6 @@
 /**
- * w 存储当前行的商品信息数据
+ * 存储当前行的商品信息数据
  */
-
 export default {
   namespaced: true,
   state: {

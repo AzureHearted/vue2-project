@@ -219,9 +219,7 @@ router.get("/goods/productInfoById", (req, res) => {
   });
 });
 
-/**
- * 商品删除接口 id
- */
+/** 商品删除接口 id */
 router.get("/goods/deleteItemById", (req, res) => {
   var id = req.query.id;
   // w 先删除与商品关联的图片
@@ -347,9 +345,7 @@ router.post("/batchUpload", upload.single("file"), function (req, res, next) {
   });
 });
 
-/**
- * f 文件删除接口
- */
+/** 文件删除接口 */
 router.get("/upload/deleteFile", (req, res) => {
   // s 获取要删除的路径参数 http://localhost:7788/a.jpg
   let url = new URL(req.query.url);

@@ -111,6 +111,7 @@
     mounted() {
       // console.log(this.$refs["upload"]);
     },
+    
     updated() {
       // console.log("uplaod更新");
       this.fileList = this.inputFileList;

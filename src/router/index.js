@@ -64,6 +64,7 @@ const routes = [
         path: "/order",
         name: "order",
         component: Order,
+        redirect: "/order/list",
         children: [
           {
             path: "list", //访问路径：/order/list

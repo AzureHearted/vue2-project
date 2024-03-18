@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="container"
-    ref="container"
-  >
+  <div class="container" ref="container">
     <!-- w产品搜索 -->
     <!-- 
       el-form 表单
@@ -16,10 +13,7 @@
 
       el-date-picker 日期选择组件
     -->
-    <div
-      class="header"
-      ref="header"
-    >
+    <div class="header" ref="header">
       <!-- s表单组件 -->
       <div class="form">
         <el-form
@@ -27,56 +21,44 @@
           :model="formData"
           class="demo-form-inline"
           label-position="right"
-          size="small"
-        >
+          size="small">
           <el-form-item label="商品名称">
             <el-input
               v-model="formData.productName"
               placeholder="输入商品名称"
-              @blur="inputBlur"
-            ></el-input>
+              @blur="inputBlur"></el-input>
           </el-form-item>
           <el-form-item label="添加时间">
             <el-date-picker
               type="date"
               v-model="formData.addTime"
-              placeholder="选择日期"
-            ></el-date-picker>
+              placeholder="选择日期"></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              @click="onSubmit"
-            >
-              查询
-            </el-button>
+            <el-button type="primary" @click="onSubmit"> 查询 </el-button>
           </el-form-item>
         </el-form>
       </div>
-      <div class="group">
+      <!-- 按钮组 -->
+      <div class="button-group">
         <el-button
           type="warning"
           icon="el-icon-plus"
           size="small"
-          @click="toProductAddPage"
-        >
+          @click="toProductAddPage">
           添加商品
         </el-button>
         <el-button
           type="danger"
           icon="el-icon-delete"
           size="small"
-          @click="handleBatchDelete"
-        >
+          @click="handleBatchDelete">
           批量删除
         </el-button>
       </div>
     </div>
-    <!-- w产品列表 -->
-    <div
-      class="content"
-      ref="content"
-    >
+    <!-- w 产品列表 -->
+    <div class="content" ref="content">
       <!-- s组件el-table -->
       <el-table
         class="table"
@@ -87,24 +69,16 @@
         :header-cell-style="{color: '#333', textAlign: 'center'}"
         :cell-style="{textAlign: 'center'}"
         highlight-selection-row
-        @selection-change="handleSelectionChange"
-      >
+        @selection-change="handleSelectionChange">
         <!-- 选择列 -->
-        <el-table-column
-          type="selection"
-          width="50"
-        >
-        </el-table-column>
+        <el-table-column type="selection" width="40"> </el-table-column>
         <el-table-column
           prop="id"
           label="商品编号"
-          width="120"
-        >
+          min-width="75"
+          show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          prop="title"
-          label="商品名称"
-        >
+        <el-table-column prop="title" label="商品名称" min-width="80">
           <template slot-scope="scope">
             <el-popover
               placement="top"
@@ -112,13 +86,11 @@
               trigger="hover"
               :open-delay="100"
               :close-delay="50"
-              width="fit-content"
-            >
+              width="fit-content">
               <div slot="reference">
                 <span
                   style="color: blue; cursor: pointer"
-                  @click="toProductDetailPage(scope.row)"
-                >
+                  @click="toProductDetailPage(scope.row)">
                   {{ scope.row.title }}
                 </span>
               </div>
@@ -126,20 +98,17 @@
                 :style="{
                   display: 'flex',
                   justifyContent: 'center',
-                }"
-              >
+                }">
                 <div
                   style="display: flex; flex-flow: row wrap; gap: 5px"
-                  v-if="JSON.parse(scope.row.image).length"
-                >
+                  v-if="JSON.parse(scope.row.image).length">
                   <el-image
                     v-for="(item, index) in JSON.parse(scope.row.image)"
                     :key="index"
                     :src="item"
                     :alt="scope.row.title"
                     style="height: 128px; aspect-ratio: auto"
-                    :preview-src-list="JSON.parse(scope.row.image)"
-                  ></el-image>
+                    :preview-src-list="JSON.parse(scope.row.image)"></el-image>
                 </div>
               </div>
             </el-popover>
@@ -148,60 +117,53 @@
         <el-table-column
           prop="price"
           label="商品价格"
-          width="120"
-        >
+          min-width="80"
+          show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           prop="category"
           label="商品类目"
-          width="120"
-        >
+          min-width="80"
+          show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="添加时间">
+        <el-table-column label="添加时间" min-width="110" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>
-              {{ $moment(scope.row.create_time).format("YYYY年MM月DD HH:mm:ss") }}
+              {{ $moment(scope.row.create_time).format("YYYY-MM-DD HH:mm:ss") }}
             </span>
           </template>
         </el-table-column>
         <el-table-column
           prop="sellPoint"
           label="商品卖点"
-          width="120"
-          show-overflow-tooltip
-        >
+          min-width="80"
+          show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          label="商品描述"
-          show-overflow-tooltip
-        >
+        <el-table-column label="商品描述" min-width="80" show-overflow-tooltip>
           <template slot-scope="scope">
             <!-- z 移除商品描述中的标签 -->
             {{ removeHTMLTag(scope.row.descs) }}
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-        >
+        <el-table-column label="操作" width="165">
           <!--
               z 这里的 slot-scope 中的 scope 可以获取当前行的数据通过 如scope.row 的方式行数据获取
             -->
-          <template slot-scope="scope">
+          <template slot-scope="{$index,row}">
             <el-button
+              class="mini"
               type="primary"
               size="mini"
               icon="el-icon-edit"
-              @click="handleEdit(scope.$index, scope.row)"
-            >
+              @click="handleEdit($index, row)">
               编辑
             </el-button>
             <el-button
+              class="mini"
               type="danger"
               size="mini"
               icon="el-icon-delete"
-              @click="handleDelete(scope.$index, scope.row)"
-            >
+              @click="handleDelete($index, row)">
               删除
             </el-button>
           </template>
@@ -214,8 +176,7 @@
           :pageSize="pageSize"
           :current-page="currentPage"
           layout="total, prev, pager, next, jumper"
-          @CurrentChange="hanldeCurrentChange"
-        ></Pagination>
+          @CurrentChange="hanldeCurrentChange"></Pagination>
       </div>
     </div>
   </div>
@@ -237,11 +198,11 @@
         },
         // w 列表数据
         tableData: [], // s 表单数据(数组对象)
+        selectedIds: [], // s 用于记录选中的id列表
         // w 分页参数
         currentPage: 1, // s 当前页码
         total: 0, // s 条目总数
         pageSize: 10, // s 每页显示数量
-        selectedIds: [], // s 用于记录选中的id列表
       };
     },
     created() {
@@ -249,7 +210,11 @@
       this.getListInfo(1);
     },
     methods: {
-      ...mapMutations("product", ["changeMode", "setRowData"]) /** w vuex的组件绑定函数 */,
+      ...mapMutations("product", [
+        "changeMode",
+        "setRowData",
+      ]) /** w vuex的组件绑定函数 */,
+      removeHTMLTag, // w 注册方法
       // f 跳转到添加商品页面
       toProductAddPage() {
         console.log("跳转到添加商品页面——————");
@@ -269,14 +234,16 @@
         this.changeMode("edit");
         this.$router.push({name: "productPage", params: {mode: "edit"}});
       },
-      // f 跳转到指定商品的详情页
+      /** 跳转到指定商品的详情页
+       * @param {Object} info 商品信息对象
+       * @param {string} info.id 商品id
+       */
       toProductDetailPage(info) {
         console.log(`跳转到商品${info.id}的详情页面——————`);
         this.setRowData(info);
         this.changeMode("show");
         this.$router.push({name: "productPage", params: {mode: "show"}});
       },
-      removeHTMLTag, // w 注册方法
       // f 调用查询接口查询商品
       onSubmit() {
         // console.log("表单内容：", this.formData);
@@ -388,7 +355,9 @@
         // console.log(res.data);
         if (res.status === 200) {
           if (this.tableData.length - 1 === 0) {
-            this.getListInfo(this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage);
+            this.getListInfo(
+              this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage
+            );
           } else {
             this.getListInfo(this.currentPage);
           }
@@ -401,7 +370,9 @@
         // console.log(res.data);
         if (res.status === 200) {
           if (this.tableData.length - ids.length === 0) {
-            this.getListInfo(this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage);
+            this.getListInfo(
+              this.currentPage - 1 > 0 ? this.currentPage - 1 : this.currentPage
+            );
           } else {
             this.getListInfo(this.currentPage);
           }
@@ -432,7 +403,7 @@
       background: #fff;
       margin-bottom: 10px;
       padding: 10px;
-      .group {
+      .button-group {
         border: 1px solid #eee;
         padding: 8px;
       }
@@ -442,6 +413,9 @@
       background: #fff;
       .pagination-container {
         padding: 10px;
+      }
+      /deep/.mini {
+        padding: 5px 10px;
       }
     }
   }

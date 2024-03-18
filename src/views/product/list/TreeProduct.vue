@@ -31,29 +31,39 @@
     },
     created() {},
     methods: {
-      // f 懒加载节点
+      /** 懒加载节点
+       * @param {*} node 节点
+       * @param {Function} resolve 回调函数(用于返回请求获得的数据)
+       */
       async load(node, resolve) {
         // console.log("节点懒加载", node, resolve);
         if (node.level === 0) {
           // w 加载一级节点
           let res = await this.$api.selectItemCategoryByParentId();
           // console.log("一级类目-----", res.data);
-          if (res.status === 200) {
+          if (res.data.status === 200) {
             return resolve(res.data.result);
           }
         } else if (node.level === 1) {
           // w 加载二级节点
           let res = await this.$api.selectItemCategoryByParentId({type: node.data.cid});
           // console.log("二级类目-----", res.data);
-          if (res.status === 200) {
+          if (res.data.status === 200) {
             return resolve(res.data.result);
+          } else {
+            // console.log("无子类目");
+            return resolve([]);
           }
         } else {
           // w 超过二级则不加载
           return resolve([]);
         }
       },
-      // f 节点点击回调
+      /** 节点点击回调
+       * @param {*} rawData 原始数据
+       * @param {*} vNode 节点对象
+       * @param {*} tree Tree对象
+       */
       handleNodeClick(rawData, vNode, tree) {
         // console.log("点击了节点", "原始数据:", rawData, "节点对象:", vNode, "Tree对象:", tree);
         this.$emit("nodeClick", rawData);
@@ -62,4 +72,4 @@
   };
 </script>
 
-<style></style>
+<style lang="less" scoped></style>

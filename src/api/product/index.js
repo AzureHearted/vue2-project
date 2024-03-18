@@ -16,38 +16,85 @@ const base = {
 };
 
 export default {
-  // f 产品列表 参数：page
+  /** 产品列表获取
+   * @param {Object} params
+   * @param {number} params.page
+   * @returns
+   */
   productList(params) {
     return axios.get(base.productList, {params});
   },
-  // f 商品查询接口 参数：search
-  // params={search:'xxx'}
+  /** 商品查询接口
+   * @param {Object} params
+   * @param {string} params.search
+   * @returns
+   */
   searchInfo(params) {
     return axios.get(base.searchInfo, {params});
   },
-  // f 通过id查询商品信息接口 参数: id
+  /** 通过id查询商品信息接口
+   * @param {Object} params
+   * @param {number} params.id
+   * @returns
+   */
   productInfoById(params) {
     return axios.get(base.productInfoById, {params});
   },
-  // f 商品删除接口(单个) 参数：id
+  /** 商品删除接口(单个)
+   * @param {Object} params
+   * @param {number} params.id
+   * @returns
+   */
   removeProductById(params) {
     return axios.get(base.removeProductById, {params});
   },
-  // f 商品批量删除接口(多个) 参数：ids (Array)
+  /** 商品批量删除接口(多个)
+   * @param {Object} params
+   * @param {number[]} params.ids
+   * @returns
+   */
   batchRemoveProductById(params) {
     return axios.get(base.batchRemoveProductById, {params});
   },
-  // f 商品类目查询 接口不同的参数cid 返回不同的类目数据 后台接受变量：type (可留空，默认返回1级类目)
+  /** 商品类目查询
+   * @param {Object} params
+   * @param {number} params.cid
+   * @param {?number} params.type
+   * @returns
+   */
   selectItemCategoryByParentId(params) {
     return axios.get(base.selectItemCategoryByParentId, {params});
   },
-  // w 商品添加接口
-  // 参数：title, image, sellPoint, price, cid, category, num, descs, paramsInfo
+  /** 商品添加接口
+   * @param {Object} params 商品信息对象
+   * @param {string} params.category 商品类别
+   * @param {string} params.cid 商品类别id
+   * @param {number} params.title 商品名称
+   * @param {number} params.price 商品单价
+   * @param {string} params.num 商品数量
+   * @param {string} params.sellPoint 商品卖点
+   * @param {string} params.image 商品图片
+   * @param {string} params.descs 商品描述
+   * @param {?*} params.paramsInfo 其他参数
+   * @returns
+   */
   addProduct(params) {
     return axios.get(base.addProduct, {params});
   },
-  // w 修改商品接口
-  // 参数: id, title, cid, category, sellPoint, price, num, descs, image, paramsInfo
+  /** 修改商品接口
+   * @param {Object} params 商品信息对象
+   * @param {number} params.id 商品id
+   * @param {string} params.category 商品类别
+   * @param {string} params.cid 商品类别id
+   * @param {number} params.title 商品名称
+   * @param {number} params.price 商品单价
+   * @param {string} params.num 商品数量
+   * @param {string} params.sellPoint 商品卖点
+   * @param {string} params.image 商品图片
+   * @param {string} params.descs 商品描述
+   * @param {?*} params.paramsInfo 其他参数
+   * @returns
+   */
   updateProduct(params) {
     return axios.get(base.updateProduct, {params});
   },

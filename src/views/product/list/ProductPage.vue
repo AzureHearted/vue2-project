@@ -24,7 +24,6 @@
               label-position="right"
               size="small"
               :rules="rules"
-              :disabled="mode === 'show'"
             >
               <el-form-item
                 label="所属分类"
@@ -118,7 +117,7 @@
   import {host} from "@/api/base";
   import TreeProduct from "./TreeProduct.vue";
   import UploadImg from "./UploadImg.vue";
-  import WangEditor from "./WangEditor.vue"; // w 导入wangEditor富文本编辑器组件
+  import WangEditor from "./MyWangEditor.vue"; // w 导入wangEditor富文本编辑器组件
   import {getPathName} from "@/utils/common";
 
   export default {
@@ -129,7 +128,6 @@
     },
     data() {
       return {
-        // w 表单数据
         form: {
           id: "", // w 编辑模式用
           category: "",
@@ -141,8 +139,7 @@
           sellPoint: "",
           image: [],
           fileList: [],
-        },
-        // w 表单验证规则
+        }, // w 表单数据
         rules: {
           title: [
             {
@@ -158,7 +155,7 @@
               trigger: "blur",
             },
           ],
-        },
+        }, // w 表单验证规则
         unUploadAmount: 0,
       };
     },
@@ -181,18 +178,18 @@
       if (this.mode === "edit" || this.mode === "show") {
         // w 如果信息内容为空则跳转页面到商品列表页面
         if (Object.keys(this.rowData).length === 0) this.$router.push("/product/list");
-        // s （编辑模式或查看模式）通过vuex仓库获取商品信息
+        // （编辑模式或查看模式）通过vuex仓库获取商品信息
         this.initData(this.rowData);
       }
     },
     methods: {
       ...mapMutations("product", ["setRowData"]),
-      // f 返回
+      /** 返回上一级 */
       handleReturn() {
         // this.$router.push("/product/list");
         this.$router.go(-1);
       },
-      // f 表单重置
+      /** 表单重置 */
       handleReset() {
         // w 调用表单的组件的重置方法
         // this.$refs["form"].resetFields();
@@ -213,7 +210,7 @@
           this.$refs["wangEditor"].html = this.rowData.descs;
         }
       },
-      // f 提交表单——保存(新增和编辑两种模式)
+      /** 提交表单——保存(新增和编辑两种模式) */
       async onSubmit() {
         // console.log("表单提交——————", this.$refs["form"]);
         // w 先等待upload组件处理相关事件
@@ -242,7 +239,17 @@
           }
         });
       },
-      // f 新增商品表单提交(api调用)
+      /** (api调用)新增商品表单提交
+       * @param {Object} productInfo 商品信息对象
+       * @param {string} productInfo.category 商品类别
+       * @param {string} productInfo.cid 商品类别id
+       * @param {number} productInfo.title 商品名称
+       * @param {number} productInfo.price 商品单价
+       * @param {string} productInfo.num 商品数量
+       * @param {string} productInfo.sellPoint 商品卖点
+       * @param {string[]} productInfo.image 商品图片
+       * @param {string} productInfo.descs 商品描述
+       */
       async addProduct({title, image, sellPoint, price, cid, category, num, descs}) {
         // console.log("添加商品信息——————");
         let res = await this.$api.addProduct({
@@ -271,7 +278,18 @@
           });
         }
       },
-      // f (api调用)更新商品信息
+      /** (api调用)更新商品信息
+       * @param {Object} productInfo 商品信息对象
+       * @param {string} productInfo.id 商品类别
+       * @param {string} productInfo.category 商品类别
+       * @param {string} productInfo.cid 商品类别id
+       * @param {number} productInfo.title 商品名称
+       * @param {number} productInfo.price 商品单价
+       * @param {string} productInfo.num 商品数量
+       * @param {string} productInfo.sellPoint 商品卖点
+       * @param {string[]} productInfo.image 商品图片
+       * @param {string} productInfo.descs 商品描述
+       */
       async updataProduct({id, title, image, sellPoint, price, cid, category, num, descs}) {
         // console.log("更新商品信息——————");
         let res = await this.$api.updateProduct({
@@ -301,7 +319,9 @@
           });
         }
       },
-      // f 通过vuex仓库获取商品信息
+      /** 初始化商品信息
+       * @param {{}} rawData 未处理的商品信息
+       */
       async initData(rawData) {
         // s 将信息赋值给组件form对象对应的属性值
         // w 分别获取两个对象的key
@@ -334,25 +354,33 @@
         // w 更新rowData
         this.setRowData(this.form);
       },
-      // f 处理树形列表节点点击事件
+      /** 处理树形列表节点点击事件
+       * @param {{}} rawData 节点对应的原始数据对象
+       */
       handleNodeClick(rawData) {
         // console.log("点击了节点", "原始数据:", rawData, "节点对象:", vNode, "Tree对象:", tree);
         this.form.category = rawData.name;
         this.form.cid = rawData.cid;
       },
-      // f 图片上组件中的文件变化时的回调
+      /** 图片上组件中的文件变化时的回调
+       * @param {*[]} fileList 文件对象数组
+       */
       uploadChange(fileList) {
         // console.log("upload组件内文件变化", fileList);
         this.form.fileList = fileList;
       },
-      // f 接收获取wangEditor中的内容
+      /** 接收获取WangEditor返回的富文内容
+       * @param {string} val 富文本(字符串类型)
+       */
       sendHtml(val) {
         this.form.descs = val;
       },
-      // f 接收upload组件中未上传的文件数量
-      getUnuploadAmount(val) {
+      /** 接收upload组件中未上传的文件数量
+       * @param {number} num 未上传的文件数量
+       */
+      getUnuploadAmount(num) {
         // console.log("未上传文件数量：", val);
-        this.unUploadAmount = val;
+        this.unUploadAmount = num;
       },
     },
     watch: {
@@ -370,8 +398,8 @@
             }
           });
         },
+        // deep: true,
       },
-      deep: true,
     },
   };
 </script>
