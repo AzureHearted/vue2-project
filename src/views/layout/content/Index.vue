@@ -6,14 +6,13 @@
       <div class="open">
         <span
           class="iconfont icon-right-indent"
-          @click="changMenu"
-          v-if="!isCollapse"
-        ></span>
+          @click="changMenu(true)"
+          v-if="!isCollapse">
+        </span>
         <span
           class="iconfont icon-left-indent"
-          @click="changMenu"
-          v-else
-        ></span>
+          @click="changMenu(false)"
+          v-else></span>
       </div>
       <!-- w 顶部右上角功能区-->
       <div class="right">
@@ -22,10 +21,7 @@
         |
         <!-- w 下拉菜单 -->
         <el-dropdown>
-          <span
-            class="el-dropdown-link"
-            :style="{color: 'white'}"
-          >
+          <span class="el-dropdown-link" :style="{color: 'white'}">
             语言环境<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -50,18 +46,18 @@
 </template>
 
 <script>
-  
+  import {mapState} from "vuex";
+
   export default {
-    props: {
-      isCollapse: {
-        type: Boolean,
-        default: false,
-      },
-    },
     data() {
       return {
         time: "",
       };
+    },
+    computed: {
+      ...mapState({
+        isCollapse: "menuIsCollapse",
+      }),
     },
     created() {
       // w 每秒进行一次时间更新(首次立即执行)
@@ -71,12 +67,13 @@
       }, 1000);
     },
     methods: {
-      changMenu() {
-        this.$emit("changShow");
-      },
       // f 更新时间
       reNewTime() {
         this.time = this.$moment().format("YYYY年MM月DD日 HH:mm:ss");
+      },
+      // s 用于更改导航栏的展开与收缩状态
+      changMenu() {
+        this.$store.commit("changeMenuCollapse", !this.isCollapse);
       },
     },
   };
@@ -116,7 +113,7 @@
     //内容区容器
     .wrapper {
       flex: 1;
-      padding: 10px;
+      // padding: 10px;
       overflow-y: auto;
     }
   }

@@ -34,6 +34,27 @@ router.get("/list", (req, res) => {
   });
 });
 
+// w 通过订单id查询订单信息
+router.get("/list/getDetail", (req, res) => {
+  const id = req.query.id;
+  const sqlLen = `SELECT * FROM orderinfo WHERE id = ${id}`;
+  sqlFn(sqlLen, null, (data) => {
+    console.log(data);
+    if (data.length > 0) {
+      res.send({
+        status: 200,
+        msg: "查找成功",
+        result: data[0],
+      });
+    } else {
+      res.send({
+        status: 500,
+        msg: "未查找到对应id的订单信息",
+      });
+    }
+  });
+});
+
 //2. 订单汇总接口---修改汇总状态id 字符串离散数字  ids
 /* 
     批量汇总  id标识  
@@ -70,8 +91,7 @@ router.get("/changeStatus", (req, res) => {
           "151" + ~~(Math.random() * 1000000) + ~~(Math.random() * 100);
         const sql = `insert into collect(orderNum,phone,totalPrice,ids,operator) values(${code},${phone},?,?,'张三')`;
         let arr = [sum, ids];
-        sqlFn(sql, arr, (result) => {
-        });
+        sqlFn(sql, arr, (result) => {});
       });
     } else {
       res.send({
@@ -87,6 +107,7 @@ router.get("/changeStatus", (req, res) => {
 */
 var MockRandom = Mock.Random;
 router.get("/list/detail", (req, res) => {
+  const id = req.query.id;
   let arr = [
     "猪肉",
     "鸡肉",
@@ -102,32 +123,49 @@ router.get("/list/detail", (req, res) => {
     "肉丸",
     "鸡胸肉",
   ];
-  let result = Mock.mock({
-    "id|+1": 1,
-    code: "3565656",
-    created: MockRandom.now("yyyy-MM-dd HH:mm:ss"), //日期
-    yudingTime: MockRandom.now("yyyy-MM-dd HH:mm:ss"), //日期
-    "list|10": [
-      //最后一页的数据在1-10的区间产生
-      {
-        "title|+1": arr, //随机汉字,
-        "price|10-100": 1,
-        "num|1-1000": 1,
-        "guige|200-1000": 200,
-        sum: function () {
-          return this.price * this.num;
-        },
-      },
-    ],
-    "pass|1-2": true,
-    shenhename: "@cword(2,3)", //随机汉字,
-    time: MockRandom.now("yyyy-MM-dd"),
-    "suggestion|1": ["同意", "不同意", "@cword(2,3)"],
-  });
-  //返回数据
-  res.send({
-    status: 200,
-    result,
+  // w先获取对应id的信息
+  const sqlLen = `SELECT * FROM orderinfo WHERE id = ${id}`;
+  sqlFn(sqlLen, null, (data) => {
+    if (data.length > 0) {
+      let part1 = data[0];
+      let result = Mock.mock({
+        id: part1.id,
+        code: part1.code,
+        created: part1.yudingTime, //日期
+        yudingTime: part1.yudingTime, //日期
+        huizongStatus: part1.huizongStatus,
+        price: part1.price,
+        company: part1.company,
+        ordername: part1.ordername,
+        phone: part1.phone,
+        "list|10": [
+          //最后一页的数据在1-10的区间产生
+          {
+            "title|+1": arr, //随机汉字,
+            "price|10-100": 1,
+            "num|1-1000": 1,
+            "guige|200-1000": 200,
+            sum: function () {
+              return this.price * this.num;
+            },
+          },
+        ],
+        "pass|1-2": true,
+        shenhename: "@cword(2,3)", //随机汉字,
+        time: MockRandom.now("yyyy-MM-dd"),
+        "suggestion|1": ["同意", "不同意", "@cword(2,3)"],
+      });
+      //返回数据
+      res.send({
+        status: 200,
+        result,
+      });
+    } else {
+      res.send({
+        status: 500,
+        msg: "未查找到对应id的订单信息",
+      });
+    }
   });
 });
 
@@ -167,25 +205,24 @@ router.get("/cancel", (req, res) => {
   sqlFn(sql, null, (arr) => {
     const ids = arr[0].ids;
     //删除
-    const sqldel= `delete from collect where id=${id}`;
-    sqlFn(sqldel,null,result=>{
-        //修改
-        const sql = `update orderinfo set huizongStatus='1' where id in (${ids})`;
-        sqlFn(sql,null,data=>{
-            if (data.affectedRows > 0) {
-                res.send({
-                  status: 200,
-                  msg: "修改成功",
-                });
-            }else{
-                res.send({
-                    status: 500,
-                    msg: "修改失败",
-                  });
-            }
-        })
-    })
-
+    const sqldel = `delete from collect where id=${id}`;
+    sqlFn(sqldel, null, (result) => {
+      //修改
+      const sql = `update orderinfo set huizongStatus='1' where id in (${ids})`;
+      sqlFn(sql, null, (data) => {
+        if (data.affectedRows > 0) {
+          res.send({
+            status: 200,
+            msg: "修改成功",
+          });
+        } else {
+          res.send({
+            status: 500,
+            msg: "修改失败",
+          });
+        }
+      });
+    });
   });
 });
 

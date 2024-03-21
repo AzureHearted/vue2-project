@@ -14,7 +14,7 @@ const ProductPage = () => import("@/views/product/list/ProductPage.vue");
 const Order = () => import("@/views/order/Index.vue");
 const OrderList = () => import("@/views/order/list/Index.vue");
 const OrderCollection = () => import("@/views/order/collection/Index.vue");
-const OrderAudit = () => import("@/views/order/audit/Index.vue");
+const OrderContract = () => import("@/views/order/contract/Index.vue");
 // s 广告分类
 const Advert = () => import("@/views/advert/Index.vue");
 const AdverList = () => import("@/views/advert/list/Index.vue");
@@ -25,11 +25,17 @@ const routes = [
   {
     path: "/",
     component: Layout,
+    meta: {
+      breadcrumbTitle: "首页",
+    },
     children: [
       {
         path: "/",
         name: "home",
         component: Home,
+        meta: {
+          breadcrumbTitle: "首页",
+        },
       },
       // w 产品管理 路由配置
       {
@@ -37,16 +43,25 @@ const routes = [
         name: "product",
         component: Product,
         redirect: "/product/list", // w 重定向 访问 /product 时重定向到 /product/list
+        meta: {
+          breadcrumbTitle: "产品管理",
+        },
         children: [
           {
             path: "list", //访问路径：/product/list
             name: "product-list",
             component: ProductList,
+            meta: {
+              breadcrumbTitle: "产品列表",
+            },
           },
           {
             path: "category", //访问路径：/product/category
             name: "product-category",
             component: ProductCategory,
+            meta: {
+              breadcrumbTitle: "产品分类",
+            },
           },
           {
             path: "product-page",
@@ -65,21 +80,33 @@ const routes = [
         name: "order",
         component: Order,
         redirect: "/order/list",
+        meta: {
+          breadcrumbTitle: "订单管理",
+        },
         children: [
           {
             path: "list", //访问路径：/order/list
             name: "order-list",
             component: OrderList,
+            meta: {
+              breadcrumbTitle: "订单列表",
+            },
           },
           {
             path: "collection", //访问路径：/order/collection
             name: "order-collection",
             component: OrderCollection,
+            meta: {
+              breadcrumbTitle: "汇总清单",
+            },
           },
           {
-            path: "audit", //访问路径：/order/audit
-            name: "order-audit",
-            component: OrderAudit,
+            path: "contract", //访问路径：/order/contract
+            name: "order-contract",
+            component: OrderContract,
+            meta: {
+              breadcrumbTitle: "订单审核",
+            },
           },
         ],
       },
@@ -88,11 +115,18 @@ const routes = [
         path: "/advert",
         name: "advert",
         component: Advert,
+        redirect:'/advert/list',
+        meta: {
+          breadcrumbTitle: "广告分类",
+        },
         children: [
           {
             path: "list", //访问路径：/advert/list
             name: "advert-list",
             component: AdverList,
+            meta: {
+              breadcrumbTitle: "广告列表",
+            },
           },
         ],
       },
@@ -107,6 +141,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  // mode: "history",
   mode: "hash",
   base: process.env.BASE_URL,
   routes,

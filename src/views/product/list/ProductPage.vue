@@ -405,13 +405,15 @@
 </script>
 <style lang="less" scoped>
   .container {
+    padding: 10px;
+    height: fit-content;
     .category {
       // height: 600px;
       background: #fff;
       .title {
         background: skyblue;
         color: white;
-        padding: 20px;
+        padding: 15px;
       }
       .tree {
         padding: 10px;

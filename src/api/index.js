@@ -1,7 +1,9 @@
 // f 公共的请求方法
 import base from "./base"; // z 导入主要接口地址
 import axios from "@/utils/request";
-import product from "./product"; // z 导入产品管理相关的api
+import product from "./product"; // z 导入产品管理相关api
+import order from "./order"; // z 导入订单相关api
+import advert from "./advert"; // z 导入广告分类相关api
 
 const api = {
   /** upload文件删除接口
@@ -23,7 +25,7 @@ const api = {
   chartInfo() {
     return axios.get(base.chartInfo);
   },
-  ...product, // z 使用对象析构的方式导入产品相关api
+  ...product, // s 使用对象扩展语法导入产品相关api
   /** 获取商品类目信息 */
   itemCategory() {
     return axios.get(base.itemCategory);
@@ -62,36 +64,8 @@ const api = {
   insertItemCategory(params) {
     return axios.get(base.insertItemCategory, {params});
   },
-  // f 订单类api
-  /** 获取订单信息
-   * @param {Object} params
-   * @param {number} params.page 页码
-   */
-  getOrderList(params) {
-    return axios.get(base.getOrderList, {params});
-  },
-  /** 修改订单汇总状态
-   * @param {Object} params
-   * @param {string} params.ids 字符串 (id数组转字符串ids)
-   * @example 如要修改id为1、3、8的订单,则将数组[1,3,8]转为字符串"1,3,8"作为ids传入
-   */
-  changeListStatus(params) {
-    return axios.get(base.changeListStatus, {params});
-  },
-  /** 订单汇总列表获取
-   * @param {Object} params
-   * @param {string} params.page 页码
-   */
-  orderCollectList(params) {
-    return axios.get(base.orderCollectList, {params});
-  },
-  /** 撤销订单汇总
-   * @param {Object} params
-   * @param {number} params.id 汇总订单的id
-   */
-  cancelOrderCollect(params) {
-    return axios.get(base.cancelOrderCollect, {params});
-  },
+  ...order, // s 使用对象扩展语法导入订单相关api
+  ...advert,
 };
 
 export default api;

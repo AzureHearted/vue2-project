@@ -2,17 +2,11 @@
   <div class="layout">
     <!-- w左侧导航 -->
     <div class="menu">
-      <Menu :isCollapse="isCollapse"></Menu>
+      <Menu></Menu>
     </div>
     <!-- w右侧内容 -->
-    <div
-      class="content"
-      :class="{small: isCollapse}"
-    >
-      <Content
-        @changShow="changeShow"
-        :isCollapse="isCollapse"
-      ></Content>
+    <div class="content" :class="{small: isCollapse}">
+      <Content></Content>
     </div>
   </div>
 </template>
@@ -20,21 +14,20 @@
 <script>
   import Menu from "./menu/Index.vue";
   import Content from "./content/Index.vue";
+  import {mapState} from "vuex";
+
   export default {
     components: {
       Menu,
       Content,
     },
     data() {
-      return {
-        isCollapse: false, // s 导航栏展开与收缩状态
-      };
+      return {};
     },
-    methods: {
-      // s 用于控制导航栏的展开与收缩
-      changeShow() {
-        this.isCollapse = !this.isCollapse;
-      },
+    computed: {
+      ...mapState({
+        isCollapse: "menuIsCollapse",
+      }),
     },
   };
 </script>

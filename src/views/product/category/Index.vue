@@ -1,27 +1,27 @@
 <template>
   <div class="container">
-    <div class="title">产品类目管理</div>
-    <div class="tree">
-      <div class="button-group">
-        <el-button
-          type="warning"
-          size="small"
-          @click="addFirstCategory"
-        >
-          新增一级类目
-        </el-button>
+    <!-- w面包屑 -->
+    <Breadcrumb></Breadcrumb>
+    <!-- w内容区 -->
+    <div class="wrapper">
+      <div class="title">产品类目管理</div>
+      <div class="tree">
+        <div class="button-group">
+          <el-button type="warning" size="small" @click="addFirstCategory">
+            新增一级类目
+          </el-button>
+        </div>
+        <!-- tree组件 -->
+        <el-tree
+          ref="tree"
+          :data="treeData"
+          node-key=""
+          :props="defaultProps"
+          show-checkbox
+          :default-expand-all="true"
+          :expand-on-click-node="true"
+          :render-content="renderContent"></el-tree>
       </div>
-      <!-- tree组件 -->
-      <el-tree
-        ref="tree"
-        :data="treeData"
-        node-key=""
-        :props="defaultProps"
-        show-checkbox
-        :default-expand-all="true"
-        :expand-on-click-node="true"
-        :render-content="renderContent"
-      ></el-tree>
     </div>
   </div>
 </template>
@@ -86,24 +86,21 @@
                 <el-button
                   class="mini"
                   icon="el-icon-plus"
-                  on-click={() => this.append(data)}
-                >
+                  on-click={() => this.append(data)}>
                   新增
                 </el-button>
               ) : null}
               <el-button
                 class="mini"
                 icon="el-icon-edit"
-                on-click={() => this.update(node, data)}
-              >
+                on-click={() => this.update(node, data)}>
                 修改
               </el-button>
               <el-button
                 class="mini"
                 type="danger"
                 icon="el-icon-delete"
-                on-click={() => this.remove(node, data)}
-              >
+                on-click={() => this.remove(node, data)}>
                 删除
               </el-button>
             </span>
@@ -159,7 +156,10 @@
         })
           .then(async ({value}) => {
             // console.log("新类目名称:", value);
-            let res = await this.$api.insertItemCategory({cid: data.cid, name: value});
+            let res = await this.$api.insertItemCategory({
+              cid: data.cid,
+              name: value,
+            });
             // console.log(res.data);
             if (res.data.status === 200) {
               this.$message({
@@ -188,11 +188,15 @@
        */
       remove(node, data) {
         // console.log("删除节点", node, data);
-        this.$confirm(`是否删除此类目(类目名称:${node.label},id:${data.id})`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        })
+        this.$confirm(
+          `是否删除此类目(类目名称:${node.label},id:${data.id})`,
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          }
+        )
           .then(async () => {
             let res = await this.$api.deleteContentCategoryById({id: data.id});
             // console.log(res.data);
@@ -240,7 +244,10 @@
               return;
             }
             // console.log("新类目名称:", value);
-            let res = await this.$api.updateCategory({id: data.id, name: value});
+            let res = await this.$api.updateCategory({
+              id: data.id,
+              name: value,
+            });
             // console.log(res.data);
             if (res.data.status === 200) {
               this.$message({
@@ -269,38 +276,42 @@
 
 <style lang="less" scoped>
   .container {
-    background: #fff;
-    // background: green;
+    padding: 0 10px 10px 10px;
     height: fit-content;
-    // overflow: hidden;
-    .title {
-      background: #eee;
-      padding: 14px;
-      color: #333;
-      font-weight: bold;
-    }
-    .button-group {
-      border: 1px solid #eee;
-      padding: 8px;
-    }
-    .tree {
+    .wrapper {
+      background: #fff;
       padding: 10px;
       display: flex;
-      flex-flow: column;
+      flex-flow: column nowrap;
       gap: 10px;
-      // overflow-y: scroll;
-      /deep/.el-tree-node__content {
-        padding: 5px 0;
-        .custom-tree-node {
-          // w 名称的样式
-          .name {
-            width: 300px;
-            display: inline-block;
-          }
-          // w el按钮样式修改
-          .mini {
-            padding: 4px 10px;
-            font-size: 14px;
+      .title {
+        background: #eee;
+        padding: 14px;
+        color: #333;
+        font-weight: bold;
+      }
+      .button-group {
+        border: 1px solid #eee;
+        padding: 8px;
+      }
+      .tree {
+        display: flex;
+        flex-flow: column;
+        gap: 10px;
+        // overflow-y: scroll;
+        /deep/.el-tree-node__content {
+          padding: 5px 0;
+          .custom-tree-node {
+            // w 名称的样式
+            .name {
+              width: 300px;
+              display: inline-block;
+            }
+            // w el按钮样式修改
+            .mini {
+              padding: 4px 10px;
+              font-size: 14px;
+            }
           }
         }
       }

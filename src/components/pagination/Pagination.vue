@@ -25,8 +25,7 @@
       :page-sizes="pageSizes"
       :page-size="pageSize"
       :layout="layout"
-      :total="total"
-    >
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -35,37 +34,27 @@
   export default {
     props: {
       currentPage: {
-        // s 当前页码
         type: Number,
         default: 1,
       },
       total: {
-        // s 条目总数
         type: Number,
         default: 0,
       },
       pageSize: {
-        // s 每页显示条数
         type: Number,
         default: 10,
       },
       pageSizes: {
-        // s 每页显示个数选择器
         type: Array,
         default() {
           return [10, 20, 30, 40, 50];
         },
       },
       layout: {
-        // s 组件布局(用于调整顺序)
         type: String,
         default: "total, prev, pager, next, jumper",
       },
-    },
-    data() {
-      return {
-        // pageSizes: [10, 20, 30, 40, 50],
-      };
     },
     methods: {
       // f (回调)切换每页数量
@@ -77,6 +66,11 @@
         // console.log(`当前页: ${val}`);
         this.$emit("CurrentChange", val);
       },
+    },
+    data() {
+      return {
+        // pageSizes: [10, 20, 30, 40, 50],
+      };
     },
   };
 </script>

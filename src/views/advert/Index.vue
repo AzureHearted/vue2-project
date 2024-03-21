@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <!-- 广告分类 -->
-    <router-view></router-view>
-  </div>
+  <!-- 广告分类 -->
+  <router-view></router-view>
 </template>
 
 <script>

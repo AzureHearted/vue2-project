@@ -1,5 +1,7 @@
 <template>
   <div class="container" ref="container">
+    <!-- w面包屑 -->
+    <Breadcrumb></Breadcrumb>
     <!-- w产品搜索 -->
     <!-- 
       el-form 表单
@@ -13,170 +15,181 @@
 
       el-date-picker 日期选择组件
     -->
-    <div class="header" ref="header">
-      <!-- s表单组件 -->
-      <div class="form">
-        <el-form
-          :inline="true"
-          :model="formData"
-          class="demo-form-inline"
-          label-position="right"
-          size="small">
-          <el-form-item label="商品名称">
-            <el-input
-              v-model="formData.productName"
-              placeholder="输入商品名称"
-              @blur="inputBlur"></el-input>
-          </el-form-item>
-          <el-form-item label="添加时间">
-            <el-date-picker
-              type="date"
-              v-model="formData.addTime"
-              placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit"> 查询 </el-button>
-          </el-form-item>
-        </el-form>
+    <div class="wrapper">
+      <div class="header" ref="header">
+        <!-- s表单组件 -->
+        <div class="form">
+          <el-form
+            :inline="true"
+            :model="formData"
+            class="demo-form-inline"
+            label-position="right"
+            size="small">
+            <el-form-item label="商品名称">
+              <el-input
+                v-model="formData.productName"
+                placeholder="输入商品名称"
+                @blur="inputBlur"></el-input>
+            </el-form-item>
+            <el-form-item label="添加时间">
+              <el-date-picker
+                type="date"
+                v-model="formData.addTime"
+                placeholder="选择日期"></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit"> 查询 </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!-- 按钮组 -->
+        <div class="button-group">
+          <el-button
+            type="warning"
+            icon="el-icon-plus"
+            size="small"
+            @click="toProductAddPage">
+            添加商品
+          </el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="small"
+            @click="handleBatchDelete">
+            批量删除
+          </el-button>
+        </div>
       </div>
-      <!-- 按钮组 -->
-      <div class="button-group">
-        <el-button
-          type="warning"
-          icon="el-icon-plus"
-          size="small"
-          @click="toProductAddPage">
-          添加商品
-        </el-button>
-        <el-button
-          type="danger"
-          icon="el-icon-delete"
-          size="small"
-          @click="handleBatchDelete">
-          批量删除
-        </el-button>
-      </div>
-    </div>
-    <!-- w 产品列表 -->
-    <div class="content" ref="content">
-      <!-- s组件el-table -->
-      <el-table
-        class="table"
-        :data="tableData"
-        style="width: 100%"
-        height="100%"
-        border
-        :header-cell-style="{color: '#333', textAlign: 'center'}"
-        :cell-style="{textAlign: 'center'}"
-        highlight-selection-row
-        @selection-change="handleSelectionChange">
-        <!-- 选择列 -->
-        <el-table-column type="selection" width="40"> </el-table-column>
-        <el-table-column
-          prop="id"
-          label="商品编号"
-          min-width="75"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column prop="title" label="商品名称" min-width="80">
-          <template slot-scope="scope">
-            <el-popover
-              placement="top"
-              :title="scope.row.title"
-              trigger="hover"
-              :open-delay="100"
-              :close-delay="50"
-              width="fit-content">
-              <div slot="reference">
-                <span
-                  style="color: blue; cursor: pointer"
-                  @click="toProductDetailPage(scope.row)">
-                  {{ scope.row.title }}
-                </span>
-              </div>
-              <div
-                :style="{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }">
-                <div
-                  style="display: flex; flex-flow: row wrap; gap: 5px"
-                  v-if="JSON.parse(scope.row.image).length">
-                  <el-image
-                    v-for="(item, index) in JSON.parse(scope.row.image)"
-                    :key="index"
-                    :src="item"
-                    :alt="scope.row.title"
-                    style="height: 128px; aspect-ratio: auto"
-                    :preview-src-list="JSON.parse(scope.row.image)"></el-image>
+      <!-- w 产品列表 -->
+      <div class="content" ref="content">
+        <!-- s组件el-table -->
+        <el-table
+          class="table"
+          :data="tableData"
+          style="width: 100%"
+          border
+          :header-cell-style="{color: '#333', textAlign: 'center'}"
+          :cell-style="{textAlign: 'center'}"
+          highlight-selection-row
+          @selection-change="handleSelectionChange">
+          <!-- 选择列 -->
+          <el-table-column type="selection" width="40"> </el-table-column>
+          <el-table-column
+            prop="id"
+            label="商品编号"
+            min-width="75"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="title" label="商品名称" min-width="80">
+            <template slot-scope="scope">
+              <el-popover
+                placement="top"
+                :title="scope.row.title"
+                trigger="hover"
+                :open-delay="100"
+                :close-delay="50"
+                width="fit-content">
+                <div slot="reference">
+                  <span
+                    style="color: blue; cursor: pointer"
+                    @click="toProductDetailPage(scope.row)">
+                    {{ scope.row.title }}
+                  </span>
                 </div>
-              </div>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="price"
-          label="商品价格"
-          min-width="80"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="category"
-          label="商品类目"
-          min-width="80"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column label="添加时间" min-width="110" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>
-              {{ $moment(scope.row.create_time).format("YYYY-MM-DD HH:mm:ss") }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="sellPoint"
-          label="商品卖点"
-          min-width="80"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column label="商品描述" min-width="80" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <!-- z 移除商品描述中的标签 -->
-            {{ removeHTMLTag(scope.row.descs) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="165">
-          <!--
+                <div
+                  :style="{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }">
+                  <div
+                    style="display: flex; flex-flow: row wrap; gap: 5px"
+                    v-if="JSON.parse(scope.row.image).length">
+                    <el-image
+                      v-for="(item, index) in JSON.parse(scope.row.image)"
+                      :key="index"
+                      :src="item"
+                      :alt="scope.row.title"
+                      style="height: 128px; aspect-ratio: auto"
+                      :preview-src-list="
+                        JSON.parse(scope.row.image)
+                      "></el-image>
+                  </div>
+                </div>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="price"
+            label="商品价格"
+            min-width="80"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="category"
+            label="商品类目"
+            min-width="80"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="添加时间"
+            min-width="110"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>
+                {{
+                  $moment(scope.row.create_time).format("YYYY-MM-DD HH:mm:ss")
+                }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="sellPoint"
+            label="商品卖点"
+            min-width="80"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="商品描述"
+            min-width="80"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <!-- z 移除商品描述中的标签 -->
+              {{ removeHTMLTag(scope.row.descs) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="165">
+            <!--
               z 这里的 slot-scope 中的 scope 可以获取当前行的数据通过 如scope.row 的方式行数据获取
             -->
-          <template slot-scope="{$index,row}">
-            <el-button
-              class="mini"
-              type="primary"
-              size="mini"
-              icon="el-icon-edit"
-              @click="handleEdit($index, row)">
-              编辑
-            </el-button>
-            <el-button
-              class="mini"
-              type="danger"
-              size="mini"
-              icon="el-icon-delete"
-              @click="handleDelete($index, row)">
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- s分页组件 -->
-      <div class="pagination-container">
-        <Pagination
-          :total="total"
-          :pageSize="pageSize"
-          :current-page="currentPage"
-          layout="total, prev, pager, next, jumper"
-          @CurrentChange="hanldeCurrentChange"></Pagination>
+            <template slot-scope="{$index, row}">
+              <el-button
+                class="mini"
+                type="primary"
+                size="mini"
+                icon="el-icon-edit"
+                @click="handleEdit($index, row)">
+                编辑
+              </el-button>
+              <el-button
+                class="mini"
+                type="danger"
+                size="mini"
+                icon="el-icon-delete"
+                @click="handleDelete($index, row)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- s分页组件 -->
+        <div class="pagination-container">
+          <Pagination
+            :total="total"
+            :pageSize="pageSize"
+            :current-page="currentPage"
+            layout="total, prev, pager, next, jumper"
+            @CurrentChange="hanldeCurrentChange"></Pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -184,6 +197,7 @@
 
 <script>
   import Pagination from "@/components/pagination/Pagination.vue";
+
   import {removeHTMLTag} from "@/utils/common";
   import {mapMutations} from "vuex"; /** w 引入vuex的辅助函数 */
 
@@ -398,24 +412,29 @@
 
 <style lang="less" scoped>
   .container {
-    .header {
-      height: 100px;
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px;
-      .button-group {
-        border: 1px solid #eee;
-        padding: 8px;
-      }
-    }
-    .content {
-      height: calc(100% - 100px - 10px - 20px - 32px - 20px);
-      background: #fff;
-      .pagination-container {
+    padding: 0 10px 10px 10px;
+    height: fit-content;
+    .wrapper {
+      .header {
+        // height: 100px;
+        background: #fff;
+        margin-bottom: 10px;
         padding: 10px;
+
+        .button-group {
+          border: 1px solid #eee;
+          padding: 8px;
+        }
       }
-      /deep/.mini {
-        padding: 5px 10px;
+      .content {
+        background: #fff;
+
+        .pagination-container {
+          padding: 10px;
+        }
+        /deep/.mini {
+          padding: 5px 10px;
+        }
       }
     }
   }

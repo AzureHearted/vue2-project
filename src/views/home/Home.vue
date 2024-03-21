@@ -25,35 +25,20 @@
     </div>
     <!--2. 访问数据统计 ----------------->
     <div class="content">
-      <div
-        class="time-info"
-        id="box13"
-      >
+      <div class="time-info" id="box13">
         <div class="title">月销售额</div>
-        <div
-          id="chartsLine"
-          style="width: 100%; height: 300px"
-        ></div>
+        <div id="chartsLine"></div>
       </div>
-      <div
-        class="area"
-        id="box1"
-      >
+      <div class="area" id="box1">
         <div class="title">产品销售比例</div>
-        <div
-          id="chartsPie"
-          style="width: 100%; height: 300px"
-        ></div>
+        <div id="chartsPie"></div>
       </div>
     </div>
     <!-- 3.  -->
     <!-- 最新内容 -->
     <div class="home-footer">
       <el-card class="box-card">
-        <div
-          slot="header"
-          class="clearfix"
-        >
+        <div slot="header" class="clearfix">
           <span>今日订单</span>
         </div>
         <div class="text item">
@@ -74,10 +59,7 @@
         </div>
       </el-card>
       <el-card class="box-card">
-        <div
-          slot="header"
-          class="clearfix"
-        >
+        <div slot="header" class="clearfix">
           <span>本月订单</span>
         </div>
         <div class="text item">
@@ -98,10 +80,7 @@
         </div>
       </el-card>
       <el-card class="box-card">
-        <div
-          slot="header"
-          class="clearfix"
-        >
+        <div slot="header" class="clearfix">
           <span>快捷入口</span>
         </div>
         <div class="text item">
@@ -181,7 +160,7 @@
       drawChart(nameList, saleNum, saleAmount) {
         // 基于准备好的dom，初始化echarts实例
         const dom = document.getElementById("chartsLine");
-        if (!dom) return;//没拿到dom就停止操作
+        if (!dom) return; //没拿到dom就停止操作
         let myChart = echarts.init(dom);
         // 绘制图表
         myChart.setOption({
@@ -231,7 +210,7 @@
       drawPie(nameList, data) {
         // 基于准备好的dom，初始化echarts实例
         const dom = document.getElementById("chartsPie");
-        if (!dom) return;//没拿到dom就停止操作
+        if (!dom) return; //没拿到dom就停止操作
         var myChart = echarts.init(dom);
         // 绘制图表
         myChart.setOption({
@@ -274,13 +253,14 @@
 </script>
 
 <style lang="less" scoped>
-  // .home {
-  //   margin: 10px;
-  // }
+  .home {
+    padding: 10px;
+  }
 
   .header {
     display: flex;
     // padding-right: 30px;
+    // padding: 20px;
 
     .item {
       flex: 1;
@@ -333,21 +313,30 @@
   // 图表
 
   .content {
-    margin: 20px;
-    display: flex;
+    padding: 10px;
     height: 320px;
+    display: flex;
 
     .time-info {
       flex: 2;
       background: #fff;
       margin-right: 20px;
       padding: 10px;
+
+      #chartsLine {
+        width: 100%;
+        height: 300px;
+      }
     }
 
     .area {
       flex: 1;
       background: #fff;
       padding: 10px;
+      #chartsPie {
+        width: 100%;
+        height: 300px;
+      }
     }
   }
 
@@ -355,8 +344,7 @@
 
   .home-footer {
     display: flex;
-    padding-left: 20px;
-    margin-bottom: 20px;
+    padding: 10px;
 
     .box-card {
       flex: 1;

@@ -5,4 +5,8 @@
 
 ## vscode 中 vue2、vue3 的核心插件说明
 
-- vue2 使用 vetur,vue3 使用 volar,二者不建议同时使用
+- vue2 使用 vetur,vue3 使用 volar(Vue - Official),二者不建议同时使用
+
+## 使用 volar(Vue - Official) 写 vue2 的注意事项
+
+- 如果 template 标签内使用 methods 内定义的函数没有智能提示，则需要将 data 放到最后

@@ -20,14 +20,7 @@ const base = {
   deleteContentCategoryById: apiUrl + "/content/deleteContentCategoryById",
   /** 新增子类目api */
   insertItemCategory: apiUrl + "/itemCategory/insertItemCategory",
-  /** 订单列表api */
-  getOrderList: apiUrl + "/order/list",
-  /** 修改汇总状态api */
-  changeListStatus: apiUrl + "/order/changeStatus",
-  /** 订单汇总列表获取api */
-  orderCollectList: apiUrl + "/order/collect",
-  /** 撤销订单汇总api */
-  cancelOrderCollect: apiUrl + "/order/cancel",
+  
 };
 
 // 单一导出

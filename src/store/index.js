@@ -7,9 +7,18 @@ import product from "./modules/product";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    menuIsCollapse: false, //w 用于控制左侧菜单收缩
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    /** 改变菜单收缩状态
+     * @param {*} state 仓库对象
+     */
+    changeMenuCollapse(state, bool) {
+      state.menuIsCollapse = bool;
+    },
+  },
   actions: {},
   modules: {
     product: product,
