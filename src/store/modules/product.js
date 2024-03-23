@@ -1,8 +1,6 @@
-/**
- * 存储当前行的商品信息数据
- */
+/** 存储当前行的商品信息数据 */
 export default {
-  namespaced: true,
+  namespaced: true, // 启用命名空间
   state: {
     mode: "add", // w 模式标识符
     rowData: {}, // w 当前行初始的数据容器
@@ -15,9 +13,14 @@ export default {
       state.rowData = JSON.parse(JSON.stringify(payload)); // w 深拷贝 JSON方法
       // console.log("vuex获取到数据————", state.rowData);
     },
-    // f 更改标题
+    /** 更改模式 */
     changeMode(state, payload) {
       state.mode = payload;
+    },
+    /** 清除信息 */
+    clearInfo(state) {
+      state.mode = "add";
+      state.rowData = {};
     },
   },
   // s 类似vue中的计算属性

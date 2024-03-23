@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <Breadcrumb></Breadcrumb>
     <div class="wrapper">
       <el-row :gutter="20">
         <el-col :span="6" :offset="0">
@@ -145,7 +144,7 @@
 </template>
 
 <script>
-  import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
+
   import PopoverDeleteButton from "@/components/popover-delete-button/PopoverDeleteButton";
   /** 数据结构定义
    * @typedef {object} treeData tree数据对象
@@ -164,7 +163,7 @@
   // let id = 10000;
 
   export default {
-    components: {Breadcrumb, PopoverDeleteButton},
+    components: { PopoverDeleteButton},
     watch: {
       "nowCategory.pid"(val, oldVal) {
         this.getAdvertInfo();
@@ -490,7 +489,6 @@
 
 <style lang="less" scoped>
   .container {
-    padding: 0 10px 10px 10px;
     height: fit-content;
     .wrapper {
       .tree {

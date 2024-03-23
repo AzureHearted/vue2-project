@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate"; // w vuex保持化插件
 
+import account from "./modules/account";
 import product from "./modules/product";
 
 Vue.use(Vuex);
@@ -12,26 +13,31 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
-    /** 改变菜单收缩状态
-     * @param {*} state 仓库对象
-     */
+    /** 改变菜单收缩状态 */
     changeMenuCollapse(state, bool) {
       state.menuIsCollapse = bool;
     },
   },
-  actions: {},
+  actions: {
+    /** 清除信息 */
+    clearInfo({commit}) {
+      // 提交 account 模块的 mutation 来清除信息
+      commit("account/clearInfo");
+      commit("product/clearInfo");
+    },
+  },
   modules: {
-    product: product,
+    account, // 使用account的vux模块
+    product, // 使用product的vux模块
   },
   plugins: [
     createPersistedState({
-      storage: window.sessionStorage, // 更改存储位置为 sessionStorage
-      key: "product-vuex-state", // 设置存储的键名
+      key: "vuex-state", // 设置存储的键名
+      paths: ["account", "product"], //指定要保持化的namespace
       // 只保存特定的状态数据，例如只保存 user 模块的数据
       // reducer(state) {
       //   user: state.user
       // },
-      paths: ["product"],
       reducer(state) {
         return state;
       },

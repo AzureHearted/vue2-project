@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <!-- w 面包屑 -->
-    <Breadcrumb></Breadcrumb>
     <!-- w 内容容器 -->
     <div class="wrapper">
       <span>订单合同:</span>
@@ -48,7 +46,6 @@
 
 <style lang="less" scoped>
   .container {
-    padding: 0 10px 10px 10px;
     height: fit-content;
     .wrapper {
       padding: 20px;

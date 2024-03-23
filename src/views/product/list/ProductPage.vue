@@ -23,46 +23,26 @@
               label-width="100px"
               label-position="right"
               size="small"
-              :rules="rules"
-            >
-              <el-form-item
-                label="所属分类"
-                prop="category"
-              >
+              :rules="rules">
+              <el-form-item label="所属分类" prop="category">
                 <span>{{ form.category }}</span>
               </el-form-item>
-              <el-form-item
-                label="商品名称"
-                prop="title"
-              >
+              <el-form-item label="商品名称" prop="title">
                 <el-input v-model="form.title"></el-input>
               </el-form-item>
-              <el-form-item
-                label="商品价格"
-                prop="price"
-                required
-              >
+              <el-form-item label="商品价格" prop="price" required>
                 <el-input-number
                   v-model="form.price"
                   controls-position="right"
-                  :min="0"
-                ></el-input-number>
+                  :min="0"></el-input-number>
               </el-form-item>
-              <el-form-item
-                label="商品数量"
-                prop="num"
-                required
-              >
+              <el-form-item label="商品数量" prop="num" required>
                 <el-input-number
                   v-model="form.num"
                   controls-position="right"
-                  :min="0"
-                ></el-input-number>
+                  :min="0"></el-input-number>
               </el-form-item>
-              <el-form-item
-                label="商品卖点"
-                prop="sellPoint"
-              >
+              <el-form-item label="商品卖点" prop="sellPoint">
                 <el-input v-model="form.sellPoint"></el-input>
               </el-form-item>
               <el-form-item label="上传图片">
@@ -71,15 +51,13 @@
                   :input-file-list="form.fileList"
                   @uploadChange="uploadChange"
                   @unUploadAmount="getUnuploadAmount"
-                  :input-disabled="mode === 'show'"
-                />
+                  :input-disabled="mode === 'show'" />
               </el-form-item>
               <el-form-item label="商品描述">
                 <WangEditor
                   ref="wangEditor"
                   :input-html="form.descs"
-                  @change="sendHtml"
-                />
+                  @change="sendHtml" />
               </el-form-item>
               <el-form-item>
                 <!-- 按钮组 -->
@@ -87,8 +65,7 @@
                   <el-button
                     type="success"
                     @click="onSubmit"
-                    v-if="mode === 'add' || mode === 'edit'"
-                  >
+                    v-if="mode === 'add' || mode === 'edit'">
                     保存
                   </el-button>
                   <el-button
@@ -99,8 +76,7 @@
                   <el-button
                     type="primary"
                     @click="handleReturn"
-                    :disabled="false"
-                  >
+                    :disabled="false">
                     返回
                   </el-button>
                 </el-button-group>
@@ -160,10 +136,18 @@
       };
     },
     computed: {
-      ...mapGetters("product", ["title"]) /** w导入vuex的product仓库中的title getter */,
-      ...mapState("product", ["mode", "rowData"]) /** w导入vuex的product仓库中的rowData数据 */,
+      ...mapGetters("product", [
+        "title",
+      ]) /** w导入vuex的product仓库中的title getter */,
+      ...mapState("product", [
+        "mode",
+        "rowData",
+      ]) /** w导入vuex的product仓库中的rowData数据 */,
     },
     created() {
+      // 更改面包屑标题
+      this.$route.meta.breadcrumbTitle = this.title;
+
       // ! 注意：如果要在create中读取ref必须使用 this.$nextTick()
       /**
        * * this.$nextTick() 在下次 DOM 更新循环结束之后执行延迟回调。
@@ -177,7 +161,8 @@
       // w 通过vuex仓库获取title判断模式
       if (this.mode === "edit" || this.mode === "show") {
         // w 如果信息内容为空则跳转页面到商品列表页面
-        if (Object.keys(this.rowData).length === 0) this.$router.push("/product/list");
+        if (Object.keys(this.rowData).length === 0)
+          this.$router.push("/product/list");
         // （编辑模式或查看模式）通过vuex仓库获取商品信息
         this.initData(this.rowData);
       }
@@ -193,7 +178,9 @@
       handleReset() {
         // w 调用表单的组件的重置方法
         // this.$refs["form"].resetFields();
-        this.form = JSON.parse(JSON.stringify(this.rowData)); /** s深拷贝_JSON方法*/
+        this.form = JSON.parse(
+          JSON.stringify(this.rowData)
+        ); /** s深拷贝_JSON方法*/
         // this.form = {...this.rowData}; /** s浅拷贝 ES6 对象展开语法 是适用于全是String Boolean Number 类型的属性的对象*/
         // z 对一些信息进行手动重置(编辑模式下需要还原到原始状态,而不是清空)
         if (this.mode === "add") {
@@ -205,7 +192,9 @@
         } else if (this.mode === "edit") {
           // console.log(this.$refs["uploadImg"], this.$refs["wangEditor"]);
           // w 重置图片上传列表
-          this.form.fileList = JSON.parse(JSON.stringify(this.rowData.fileList));
+          this.form.fileList = JSON.parse(
+            JSON.stringify(this.rowData.fileList)
+          );
           // w 重置WangEditor内容
           this.$refs["wangEditor"].html = this.rowData.descs;
         }
@@ -250,7 +239,16 @@
        * @param {string[]} productInfo.image 商品图片
        * @param {string} productInfo.descs 商品描述
        */
-      async addProduct({title, image, sellPoint, price, cid, category, num, descs}) {
+      async addProduct({
+        title,
+        image,
+        sellPoint,
+        price,
+        cid,
+        category,
+        num,
+        descs,
+      }) {
         // console.log("添加商品信息——————");
         let res = await this.$api.addProduct({
           title,
@@ -290,7 +288,17 @@
        * @param {string[]} productInfo.image 商品图片
        * @param {string} productInfo.descs 商品描述
        */
-      async updataProduct({id, title, image, sellPoint, price, cid, category, num, descs}) {
+      async updataProduct({
+        id,
+        title,
+        image,
+        sellPoint,
+        price,
+        cid,
+        category,
+        num,
+        descs,
+      }) {
         // console.log("更新商品信息——————");
         let res = await this.$api.updateProduct({
           id,
@@ -329,7 +337,9 @@
         const infoKey = Object.keys(rawData);
         // w 获取两个对象共有的属性集合(交集)
         const commonKeys = new Set(
-          [...formKey, ...infoKey].filter((key) => formKey.includes(key) && infoKey.includes(key))
+          [...formKey, ...infoKey].filter(
+            (key) => formKey.includes(key) && infoKey.includes(key)
+          )
         );
         // w 仅将两个对象中相同的属性值赋值给from对象
         commonKeys.forEach((key) => {

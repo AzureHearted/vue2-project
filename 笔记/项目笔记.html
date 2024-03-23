@@ -1319,6 +1319,123 @@ myChart.<span class="hljs-title function_">setOption</span>({
 </ul>
 </li>
 </ol>
+<h2 id="国际化">国际化</h2>
+<ol>
+<li>
+<p><a href="https://kazupon.github.io/vue-i18n/zh/introduction.html">vue-i18n</a> 国际化</p>
+<ol>
+<li><a href="https://kazupon.github.io/vue-i18n/zh/installation.html#yarn">安装</a> <code>npm install vue-i18n</code> 或 <code>yarn add vue-i18n</code> ,还可以使用 Vue Cli 3.x 进行安装 <code>vue add i18n</code></li>
+<li>引入</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-comment">// 如果使用模块系统 (例如通过 vue-cli)，则需要导入 Vue 和 VueI18n ，然后调用 Vue.use(VueI18n)。</span>
+<span class="hljs-comment">// import Vue from &#x27;vue&#x27;</span>
+<span class="hljs-comment">// import VueI18n from &#x27;vue-i18n&#x27;</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Vue.use(VueI18n)</span>
+
+<span class="hljs-comment">// 准备翻译的语言环境信息</span>
+<span class="hljs-keyword">const</span> messages = {
+  <span class="hljs-attr">en</span>: {
+    <span class="hljs-attr">message</span>: {
+      <span class="hljs-attr">hello</span>: <span class="hljs-string">&quot;hello world&quot;</span>,
+    },
+  },
+  <span class="hljs-attr">ja</span>: {
+    <span class="hljs-attr">message</span>: {
+      <span class="hljs-attr">hello</span>: <span class="hljs-string">&quot;こんにちは、世界&quot;</span>,
+    },
+  },
+};
+
+<span class="hljs-comment">// 通过选项创建 VueI18n 实例</span>
+<span class="hljs-keyword">const</span> i18n = <span class="hljs-keyword">new</span> <span class="hljs-title class_">VueI18</span>n({
+  <span class="hljs-attr">locale</span>: <span class="hljs-string">&quot;ja&quot;</span>, <span class="hljs-comment">// 设置地区</span>
+  messages, <span class="hljs-comment">// 设置地区信息</span>
+});
+
+<span class="hljs-comment">// 通过 `i18n` 选项创建 Vue 实例</span>
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>({i18n}).$mount(<span class="hljs-string">&quot;#app&quot;</span>);
+
+<span class="hljs-comment">// 现在应用程序已经准备好了！</span>
+</code></pre>
+<ol start="3">
+<li>视图上使用</li>
+</ol>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;app&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{{ $t(&quot;message.hello&quot;) }}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<ol start="4">
+<li>修改</li>
+<li>注意事项
+<ol>
+<li>配置完成后报错,可能是 node 版本问题,尝试通过<a href="https://blog.csdn.net/m0_62173728/article/details/131992891">切换 node 版本</a>解决</li>
+<li>通过降低 vue-i18n 的版本解决,如本项目由于使用 vue2,则至少 j 将 vue-i18n 需要降至 8.28.2 版本(理论上 vue2 中使用 vue-i18 只需要降至 8.x 版本即可),通过指令<code>npm i vue-i18n@8.x -S</code> 或者 <code>yarn add vue-i18n@8.x</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p><a href="https://element.eleme.cn/#/zh-CN/component/i18n">element-ui 库</a> 国际化</p>
+</li>
+</ol>
+<h2 id="nvm-的使用-nodejs-的版本管理工具"><a href="https://blog.csdn.net/m0_62173728/article/details/131992891">nvm 的使用</a> (nodejs 的版本管理工具)</h2>
+<ol>
+<li><a href="https://github.com/coreybutler/nvm-windows/releases/tag/1.1.12">下载</a></li>
+<li>安装...</li>
+<li>常用指令</li>
+</ol>
+<pre><code class="language-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">查看当前 node 版本</span>
+node -v
+<span class="hljs-meta prompt_"># </span><span class="language-bash">查看可用 node 版本</span>
+nvm list available
+<span class="hljs-meta prompt_"># </span><span class="language-bash">或</span>
+nvm ls available
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">安装指定 node 版本</span>
+nvm install 16.14.0
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">查看已安装的 node 版本</span>
+nvm list
+<span class="hljs-meta prompt_"># </span><span class="language-bash">或</span>
+nvm ls
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">切换到指定 node 版本</span>
+nvm use 16.14.0
+
+</code></pre>
+<ol start="4">
+<li>注意切换 node 版本后,项目中的 node_modules 最好删除重新安装</li>
+</ol>
+<h2 id="用户路由权限">用户路由权限</h2>
+<ol>
+<li>介绍
+根据用户身份不同 登录进入界面后 看到的路由界面不同 例如:大学考试系统(学员登录,老师登录)</li>
+<li>功能
+<ol>
+<li>登录信息 查看身份
+<ul>
+<li>超级管理员 admin</li>
+<li>普通管理员 任意账号</li>
+</ul>
+</li>
+<li>进入这个系统必须通过登录,这一点需要通过配置<strong>导航守卫</strong>来实现</li>
+<li>登录信息存储到 vuex 仓库中 或 本地,这个项目使用 vuex
+<ol>
+<li>实现组件数据共享 登录账号等信息</li>
+<li>登录成功存储 vuex 登录信息标识</li>
+<li>vuex-持久化</li>
+<li>退出登录清除临时信息</li>
+</ol>
+</li>
+<li>配置导航守卫(路由守卫)
+<ol>
+<li>配置路由元信息 meta 字,标识哪些界面需要登录才能进入</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 
             <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
             

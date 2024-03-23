@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <!-- w 面包屑 -->
-    <Breadcrumb></Breadcrumb>
     <!-- w 内容容器 -->
     <div class="wrapper">
       <div class="header">
@@ -314,7 +312,6 @@
 
 <style lang="less" scoped>
   .container {
-    padding: 0 10px 10px 10px;
     height: fit-content;
     .wrapper {
       .header {

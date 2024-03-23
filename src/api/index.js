@@ -6,6 +6,22 @@ import order from "./order"; // z 导入订单相关api
 import advert from "./advert"; // z 导入广告分类相关api
 
 const api = {
+  /** 登录接口
+   * @param {Object} params
+   * @param {string} params.user
+   * @param {string} params.pwd
+   */
+  login(params) {
+    return axios.post(base.login, params); 
+    // 注:post传参不需要进行解构,get传参需要解构
+  },
+  /** 用户权限数据接口
+   * @param {Object} params
+   * @param {string} params.token
+   */
+  permission(params) {
+    return axios.get(base.permission, {params});
+  },
   /** upload文件删除接口
    * @param {Object} params
    * @param {string} params.url

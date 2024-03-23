@@ -22,9 +22,6 @@
    */
 
   export default {
-    data() {
-      return {};
-    },
     computed: {
       navs() {
         /** @type {route[]} */
@@ -51,15 +48,16 @@
         return to;
       },
     },
+    data() {
+      return {};
+    },
   };
 </script>
 
 <style lang="less" scoped>
   .breadcrumb {
-    position: sticky;
-    top: 0px;
     padding: 10px;
     background: #f5f5f5;
-    z-index: 2;
+    // z-index: 2;
   }
 </style>

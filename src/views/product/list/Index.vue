@@ -1,7 +1,5 @@
 <template>
   <div class="container" ref="container">
-    <!-- w面包屑 -->
-    <Breadcrumb></Breadcrumb>
     <!-- w产品搜索 -->
     <!-- 
       el-form 表单
@@ -235,7 +233,7 @@
         // w 传入一个空对象初始化store
         this.setRowData({});
         this.changeMode("add");
-        this.$router.push({name: "productPage", params: {mode: "add"}});
+        this.$router.push({name: "productPage"});
       },
       // f 跳转到指定商品的编辑页面
       toProductEditPage(info) {
@@ -246,7 +244,7 @@
         // w 存储当前行的数据-->跳转到商品页面-->获取行数据-->商品页面展示信息
         this.setRowData(info);
         this.changeMode("edit");
-        this.$router.push({name: "productPage", params: {mode: "edit"}});
+        this.$router.push({name: "productPage"});
       },
       /** 跳转到指定商品的详情页
        * @param {Object} info 商品信息对象
@@ -412,7 +410,6 @@
 
 <style lang="less" scoped>
   .container {
-    padding: 0 10px 10px 10px;
     height: fit-content;
     .wrapper {
       .header {

@@ -10,26 +10,31 @@
     router
     :collapse="isCollapse">
     <el-menu-item>
-      <span slot="title">我的商品采购管理系统</span>
+      <span slot="title">
+        {{ $t("layout.menu.title") }}
+      </span>
     </el-menu-item>
     <el-menu-item index="/">
       <i class="el-icon-menu"></i>
-      <span slot="title">首页</span>
+      <!-- <span slot="title">首页</span> -->
+      <span slot="title">
+        {{ $t("layout.menu.home") }}
+      </span>
     </el-menu-item>
     <!-- s产品管理 -->
     <el-submenu index="/product">
       <template slot="title">
         <i class="el-icon-s-goods"></i>
-        <span>产品管理</span>
+        <span>{{ $t("layout.menu.product_management") }}</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="/product/list">
           <i class="el-icon-setting"></i>
-          产品列表
+          <span>产品列表</span>
         </el-menu-item>
         <el-menu-item index="/product/category">
           <i class="el-icon-setting"></i>
-          产品分类
+          <span>产品分类</span>
         </el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -37,20 +42,21 @@
     <el-submenu index="/order">
       <template slot="title">
         <i class="el-icon-s-goods"></i>
-        <span>订单管理</span>
+        <!-- <span>订单管理</span> -->
+        <span>{{ $t("layout.menu.order_management") }}</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="/order/list">
           <i class="el-icon-setting"></i>
-          订单列表
+          <span>订单列表</span>
         </el-menu-item>
         <el-menu-item index="/order/collection">
           <i class="el-icon-setting"></i>
-          汇总清单
+          <span>汇总清单</span>
         </el-menu-item>
         <el-menu-item index="/order/contract">
           <i class="el-icon-setting"></i>
-          订单审核
+          <span>订单审核</span>
         </el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -58,12 +64,31 @@
     <el-submenu index="/advert">
       <template slot="title">
         <i class="el-icon-s-goods"></i>
-        <span>广告分类</span>
+        <!-- <span>广告分类</span> -->
+        <span>{{ $t("layout.menu.advertising_classification") }}</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="/advert/list">
           <i class="el-icon-setting"></i>
-          广告列表
+          <span>广告列表</span>
+        </el-menu-item>
+      </el-menu-item-group>
+    </el-submenu>
+    <!-- s系统管理 -->
+    <el-submenu index="/system">
+      <template slot="title">
+        <i class="el-icon-setting"></i>
+        <!-- <span>系统管理</span> -->
+        <span>{{ $t("layout.menu.system_management") }}</span>
+      </template>
+      <el-menu-item-group>
+        <el-menu-item index="/system/role">
+          <i class="el-icon-setting"></i>
+          <span>角色管理</span>
+        </el-menu-item>
+        <el-menu-item index="/system/department">
+          <i class="el-icon-setting"></i>
+          <span>部门管理</span>
         </el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -102,6 +127,11 @@
     .is-active {
       background: #1e78fb !important;
       color: white !important;
+    }
+    .el-menu-item,
+    .el-submenu {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 

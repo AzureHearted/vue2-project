@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <!-- w面包屑 -->
-    <Breadcrumb></Breadcrumb>
     <!-- w内容区 -->
     <div class="wrapper">
       <div class="title">产品类目管理</div>
@@ -146,6 +144,7 @@
        * @param {Object} data 节点数据对象
        */
       append(data) {
+        event.stopPropagation(); //阻止原生事件传递
         // console.log("添加子节点", data);
         this.$prompt("请输入类目名称：", {
           title: `为类目"${data.name}"新增子类目`,
@@ -187,6 +186,8 @@
        * @param {Object} node 节点对象
        */
       remove(node, data) {
+        event.stopPropagation(); //阻止原生事件传递
+
         // console.log("删除节点", node, data);
         this.$confirm(
           `是否删除此类目(类目名称:${node.label},id:${data.id})`,
@@ -226,6 +227,8 @@
        * @param {Object} node 节点对象
        */
       update(node, data) {
+        event.stopPropagation(); //阻止原生事件传递
+
         // console.log("修改节点", node, data);
         this.$prompt("请输入新类目名称：", {
           title: `修改类目"${data.name}"的名称`,
@@ -276,7 +279,6 @@
 
 <style lang="less" scoped>
   .container {
-    padding: 0 10px 10px 10px;
     height: fit-content;
     .wrapper {
       background: #fff;

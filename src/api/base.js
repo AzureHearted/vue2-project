@@ -2,6 +2,10 @@
 // w 环境变量获取api
 const apiUrl = process.env.VUE_APP_BASE_URL;
 const base = {
+  /** 登录接口 */
+  login: apiUrl + "/login",
+  /** 用户权限数据接口 */
+  permission: apiUrl + "/permission",
   /** upload文件删除接口api */
   uploadDeleteFile: apiUrl + "/upload/deleteFile",
   /** 首页统计数据api */
@@ -20,7 +24,6 @@ const base = {
   deleteContentCategoryById: apiUrl + "/content/deleteContentCategoryById",
   /** 新增子类目api */
   insertItemCategory: apiUrl + "/itemCategory/insertItemCategory",
-  
 };
 
 // 单一导出

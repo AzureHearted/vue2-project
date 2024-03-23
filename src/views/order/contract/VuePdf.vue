@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <el-button type="primary" size="default" @click="print"> 打印 </el-button>
+  <div class="container">
+    <div class="button-group">
+      <el-button type="primary" size="default" @click="print"> 打印 </el-button>
+    </div>
     <hr />
     <!-- 写法1:默认获取第一张pdf内容 -->
     <!-- <pdf ref="pdf" :src="url"></pdf> -->
@@ -66,4 +68,10 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .container {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+  }
+</style>
