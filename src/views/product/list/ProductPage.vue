@@ -146,7 +146,7 @@
     },
     created() {
       // 更改面包屑标题
-      this.$route.meta.breadcrumbTitle = this.title;
+      this.$route.meta.title = this.title;
 
       // ! 注意：如果要在create中读取ref必须使用 this.$nextTick()
       /**
@@ -415,7 +415,7 @@
 </script>
 <style lang="less" scoped>
   .container {
-    padding: 10px;
+    // padding: 10px;
     height: fit-content;
     .category {
       // height: 600px;

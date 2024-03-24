@@ -1,7 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "@/router"; //引入路由配置
-import store from "@/store"; //引入vuex仓库
+import router from "@/router"; // 引入路由配置
+import "@/router/permission"; // 引入路由守卫
+import store from "@/store"; // 引入vuex仓库
 import "@/plugins/element";
 import "normalize.css";
 import "@/assets/css/base.css"; //引入基础样式
@@ -23,8 +24,8 @@ import i18n from "@/lang";
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store, // w 将vuex仓库添加到vue实例中
-  i18n,
-  render: (h) => h(App),
+	router,
+	store, // w 将vuex仓库添加到vue实例中
+	i18n,
+	render: (h) => h(App),
 }).$mount("#app");

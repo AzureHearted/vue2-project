@@ -18,7 +18,7 @@
    * @property {string=} redirect
    * @property {string} name
    * @property {route} parent
-   * @property {{breadcrumbTitle?:string}} meta
+   * @property {{title?:string}} meta
    */
 
   export default {
@@ -30,7 +30,7 @@
         return matched.map((r) => {
           let {path, redirect, name, parent, meta} = r;
           return {
-            title: meta.breadcrumbTitle,
+            title: meta.title,
             to: this.toPath(path, redirect),
           };
         });

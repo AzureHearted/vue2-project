@@ -12,7 +12,7 @@ const api = {
    * @param {string} params.pwd
    */
   login(params) {
-    return axios.post(base.login, params); 
+    return axios.post(base.login, params);
     // 注:post传参不需要进行解构,get传参需要解构
   },
   /** 用户权限数据接口

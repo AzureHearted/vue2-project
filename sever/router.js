@@ -93,7 +93,10 @@ router.get("/home/dataCount", (req, res) => {
           "collect|0-9999": 1,
           viewsFun4: function () {
             if (this.collectTotal < this.collect) {
-              [this.collectTotal, this.collect] = [this.collect, this.collectTotal];
+              [this.collectTotal, this.collect] = [
+                this.collect,
+                this.collectTotal,
+              ];
             }
           },
         },
@@ -122,7 +125,10 @@ router.get("/home/orderinfo", (req, res) => {
         "curOrderCount|1-1000": 1,
         count: function () {
           if (this.curOrderCount > this.orderCount) {
-            [this.orderCount, this.curOrderCount] = [this.curOrderCount, this.orderCount];
+            [this.orderCount, this.curOrderCount] = [
+              this.curOrderCount,
+              this.orderCount,
+            ];
           }
         },
         "money|1-200000": 1,
@@ -155,7 +161,8 @@ router.get("/goods/projectList", (req, res) => {
   const sqlLen = "select * from project where id";
   sqlFn(sqlLen, null, (data) => {
     let len = data.length;
-    const sql = "select * from project order by id desc limit 8 offset " + (page - 1) * 8;
+    const sql =
+      "select * from project order by id desc limit 8 offset " + (page - 1) * 8;
     sqlFn(sql, null, (result) => {
       if (result.length > 0) {
         res.send({
@@ -181,7 +188,9 @@ router.get("/goods/projectList", (req, res) => {
 router.get("/goods/search", (req, res) => {
   var search = req.query.search;
   const sql =
-    "select * from project where concat(`title`,`sellPoint`,`descs`) like '%" + search + "%'";
+    "select * from project where concat(`title`,`sellPoint`,`descs`) like '%" +
+    search +
+    "%'";
   sqlFn(sql, null, (result) => {
     if (result.length > 0) {
       res.send({
@@ -298,7 +307,9 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // s 解决中文文件名乱码问题
-    const encodedFilename = Buffer.from(file.originalname, "latin1").toString("utf8");
+    const encodedFilename = Buffer.from(file.originalname, "latin1").toString(
+      "utf8"
+    );
     cb(null, Date.now() + "-" + encodedFilename);
   },
 });
@@ -389,7 +400,17 @@ router.get("/goods/item/insertTbItem", (req, res) => {
 
   const sql =
     "insert into project(title, image, sellPoint, price, cid, category, num, descs, paramsInfo) values (?,?,?,?,?,?,?,?,?)";
-  var arr = [title, image, sellPoint, price, cid, category, num, descs, paramsInfo];
+  var arr = [
+    title,
+    image,
+    sellPoint,
+    price,
+    cid,
+    category,
+    num,
+    descs,
+    paramsInfo,
+  ];
   sqlFn(sql, arr, (result) => {
     if (result.affectedRows > 0) {
       res.send({
@@ -423,7 +444,18 @@ router.get("/goods/item/updateTbItem", (req, res) => {
   var image = req.query.image || "";
   var sql =
     "update project set title=?,sellPoint=?,price=?,cid=?,category=?,num=?,descs=?,paramsInfo=?,image=? where id=?";
-  var arr = [title, sellPoint, price, cid, category, num, desc, paramsInfo, image, id];
+  var arr = [
+    title,
+    sellPoint,
+    price,
+    cid,
+    category,
+    num,
+    desc,
+    paramsInfo,
+    image,
+    id,
+  ];
   sqlFn(sql, arr, (result) => {
     if (result.affectedRows > 0) {
       res.send({
