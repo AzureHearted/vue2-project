@@ -10,7 +10,7 @@
       <el-dialog
         title="查看合同"
         :visible.sync="dialogVisible"
-        width="70%"
+        width="50%"
         @close="handleClose">
         <VuePdf :pdf-url="pdfUrl"></VuePdf>
         <span slot="footer">
@@ -38,7 +38,7 @@
       return {
         dialogVisible: false,
         pdfUrl:
-          process.env.VUE_APP_ENV === "product" ? "sxt2.pdf" : "/sxt2.pdf",
+          process.env.VUE_APP_ENV === "product" ? "合同.pdf" : "/合同.pdf",
       };
     },
   };
